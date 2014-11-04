@@ -10,3 +10,9 @@ ToDo
 - GUI
 - Log of events
 - Image Writing and analysis
+
+Doing
+---------
+- Base classes and conception
+- Base board data input
+- Unit Test
