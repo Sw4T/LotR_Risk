@@ -11,6 +11,15 @@ public class Territoire {
 	{
 		this.nom = name;
 		this.has_Stronghold = has_Stronghold;
+		this.nb_unite = 0;
+	}
+	
+	public void add_Units(int nbUnitToAdd) {
+		this.nb_unite += nbUnitToAdd;
+	}
+	
+	public void remove_Units(int nbUnitToRemove) {
+		this.nb_unite -= nbUnitToRemove;
 	}
 	
 	public String getNom() {
@@ -25,7 +34,7 @@ public class Territoire {
 		this.nb_unite = nb_unite;
 	}
 
-	public boolean isHas_Hero() {
+	public boolean has_Hero() {
 		return has_Hero;
 	}
 

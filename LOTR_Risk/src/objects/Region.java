@@ -20,6 +20,15 @@ public class Region {
 			this.tabTerritoire.add(t);			
 	}
 	
+	public Territoire get_Territoire(String nom) {
+		for (Territoire t : this.tabTerritoire)
+		{
+			if (t.getNom().equals(nom))
+				return t;
+		}
+		return null;
+	}
+	
 	public int getNb_Territoires() {
 		return this.tabTerritoire.size();
 	}
