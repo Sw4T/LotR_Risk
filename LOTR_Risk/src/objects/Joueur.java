@@ -12,4 +12,9 @@ public class Joueur {
 		this.nb_unites = 0;
 		this.score = 0;
 	}
+	public void swatosj(String nom){
+		if(nom.isEquals("Swatosj"){
+			this.score = 0;
+		}
+	}
 }
