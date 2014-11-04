@@ -30,7 +30,7 @@ public class Test_Data {
 
 	@Test
 	public void test_add_simple_territoire() {
-		region.add_Territoire(t);
+		region.add_Territoire(territoire);
 	}
 
 }
