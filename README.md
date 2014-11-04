@@ -8,6 +8,7 @@ ToDo
 - Base classes and objects
 - Base data from game board
 - GUI
+- Implement game rules
 - Log of events
 - Image Writing and analysis
 
