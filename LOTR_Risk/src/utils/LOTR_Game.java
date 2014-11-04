@@ -1,18 +1,15 @@
 package utils;
 
-import java.util.HashMap;
-
-import objects.Region;
-import objects.Territoire;
 
 
 public class LOTR_Game {
 
 	private int nb_joueurs;
-	private HashMap<Region, Territoire> map;
+	private LOTR_Data data;
 	
 	public LOTR_Game(int nb_joueur) {
 		this.nb_joueurs = nb_joueur;
+		this.data = new LOTR_Data(); //Données du plateau initiales
 	}
 	
 	public  void init_Data()
