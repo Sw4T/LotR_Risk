@@ -1,18 +1,24 @@
 package utils;
 
+import java.util.ArrayList;
+
 import objects.Region;
 import objects.Territoire;
 
 public class LOTR_Data {
 	
+	private ArrayList<Region> mapRegion;
+	
 	public LOTR_Data() {
-		this.init_list_Territoire_Rohan(); 
-		this.init_list_Territoire_Arnor(); 
-		this.init_list_Territoire_Rhovanion(); 
-		this.init_list_Territoire_Eriador(); 
-		this.init_list_Territoire_Rhun(); 
-		this.init_list_Territoire_Foret_Noire();  
+		this.mapRegion = new ArrayList<Region>(6);
+		mapRegion.add(this.init_list_Territoire_Rohan()); 
+		mapRegion.add(this.init_list_Territoire_Arnor()); 
+		mapRegion.add(this.init_list_Territoire_Rhovanion()); 
+		mapRegion.add(this.init_list_Territoire_Eriador()); 
+		mapRegion.add(this.init_list_Territoire_Rhun()); 
+		mapRegion.add(this.init_list_Territoire_Foret_Noire());  
 	}
+	
 	
 	public Region init_list_Territoire_Rohan()
 	{

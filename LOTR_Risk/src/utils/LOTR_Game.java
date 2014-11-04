@@ -11,9 +11,4 @@ public class LOTR_Game {
 		this.nb_joueurs = nb_joueur;
 		this.data = new LOTR_Data(); //Données du plateau initiales
 	}
-	
-	public  void init_Data()
-	{
-		//this.map.put(new Region("Arnor", 12, 7), value)
-	}
 }
