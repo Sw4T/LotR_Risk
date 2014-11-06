@@ -19,8 +19,19 @@ public class LOTR_Data {
 		mapRegion.add(this.init_list_Territoire_Foret_Noire());  
 	}
 	
+	public Region getRegionByName(String str) 
+	{
+		for (Region r : this.mapRegion)
+		{
+			if (r.getNom().equals(str)) {
+				return r;
+			}
+		}
+		return null;
+		
+	}
 	
-	public Region init_list_Territoire_Rohan()
+	private Region init_list_Territoire_Rohan()
 	{
 		Region r = new Region("Rohan", 4);
 		r.add_Territoire(new Territoire("Pays des Vieux Biscornus", true));
@@ -33,7 +44,7 @@ public class LOTR_Data {
 		return r;
 	}
 	
-	public Region init_list_Territoire_Rhovanion()
+	private Region init_list_Territoire_Rhovanion()
 	{
 		Region r = new Region("Rhovanion", 5);
 		r.add_Territoire(new Territoire("Marais des Morts", false));
@@ -47,7 +58,7 @@ public class LOTR_Data {
 		return r;
 	}
 	
-	public Region init_list_Territoire_Eriador()
+	private Region init_list_Territoire_Eriador()
 	{
 		Region r = new Region("Eriador", 3);
 		r.add_Territoire(new Territoire("Collines des Tours", false));
@@ -60,7 +71,7 @@ public class LOTR_Data {
 		return r;
 	}
 	
-	public Region init_list_Territoire_Arnor()
+	private Region init_list_Territoire_Arnor()
 	{
 		Region r = new Region("Arnor", 7);
 		r.add_Territoire(new Territoire("Pays de Bouc", false));
@@ -77,7 +88,7 @@ public class LOTR_Data {
 		return r;
 	}
 	
-	public Region init_list_Territoire_Foret_Noire()
+	private Region init_list_Territoire_Foret_Noire()
 	{
 		Region r = new Region("Forêt Noire", 4);
 		r.add_Territoire(new Territoire("Carrock", false));
@@ -88,7 +99,7 @@ public class LOTR_Data {
 		return r;
 	}
 	
-	public Region init_list_Territoire_Rhun()
+	private Region init_list_Territoire_Rhun()
 	{
 		Region r = new Region("Rhûn", 2);
 		r.add_Territoire(new Territoire("Esgaroth", false));

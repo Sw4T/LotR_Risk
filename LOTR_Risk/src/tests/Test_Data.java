@@ -9,9 +9,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import utils.LOTR_Data;
+
 public class Test_Data {
 
-	//private LOTR_Data data;
+	private LOTR_Data data;
 	private Region region;
 	private Territoire territoire;
 	private Joueur joueur;
@@ -22,12 +24,14 @@ public class Test_Data {
 		region = new Region("testRegion", 5);
 		territoire = new Territoire("testTerritoire", false);
 		joueur = new Joueur("Arthure");
+		data = new LOTR_Data();
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		region = null;
 		joueur = null;
+		data = null;
 		territoire = null;
 	}
 
@@ -48,6 +52,12 @@ public class Test_Data {
 		joueur.add_Territoire(territoire);
 		joueur.remove_Territoire(territoire);
 		assertEquals(joueur.has_Territoire(territoire), false);
+	}
+	
+	@Test
+	public void test_get_Region_ByName() {
+		region.setNom("Arnor");
+		assertEquals(data.getRegionByName("Arnor").getNom(), region.getNom());
 	}
 
 }

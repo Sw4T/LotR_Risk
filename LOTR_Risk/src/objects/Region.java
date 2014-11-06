@@ -36,6 +36,11 @@ public class Region {
 	public String getNom() {
 		return nom;
 	}
+	
+	/* ONLY FOR TESTING */
+	public void setNom(String s) {
+		this.nom = s;
+	}
 
 	public int getNb_Renforts() {
 		return nb_renforts;
