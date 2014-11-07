@@ -19,14 +19,15 @@ public class Territoire {
 	}
 	
 	public void remove_Units(int nbUnitToRemove) {
-		this.nb_unite -= nbUnitToRemove;
+		if (this.nb_unite - nbUnitToRemove > 0)
+			this.nb_unite -= nbUnitToRemove;
 	}
 	
 	public String getNom() {
 		return nom;
 	}
 
-	public int getNb_unite() {
+	public int getNb_Unite() {
 		return nb_unite;
 	}
 
