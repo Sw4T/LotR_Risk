@@ -1,7 +1,7 @@
 LotR_Risk
 =========
 
-LOTR Risk board game support for Java &amp; Android
+LOTR Risk board game support for Java &amp; Android in development
 
 ToDo
 ----
