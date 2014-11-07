@@ -19,4 +19,4 @@ Doing
     - Unit Test
 
 
-Un tutoriel sur les fichiers **.md** (markdown language) peut être trouvé *_<u>[ici](www.daringfireball.net/projects/markdown/basics)</u>_*.
+Un tutoriel sur les fichiers **.md** (markdown language) peut être trouvé *_[ici](http://www.daringfireball.net/projects/markdown/basics)_*.
