@@ -28,7 +28,6 @@ public class LOTR_Data {
 			}
 		}
 		return null;
-		
 	}
 	
 	private Region init_list_Territoire_Rohan()
