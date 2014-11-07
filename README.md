@@ -1,19 +1,23 @@
 LotR_Risk
 =========
 
-LOTR Risk board game support for Java &amp; Android
+LOTR Risk board game support for Java &amp; Android in development
 
 ToDo
-=========
-- Base classes and objects
-- Base data from game board
-- GUI
-- Implement game rules
-- Log of events
-- Image Writing and analysis
+----
+    - Base classes and objects
+    - Base data from game board
+    - GUI
+    - Implement game rules
+    - Log of events
+    - Image Writing and analysis
 
 Doing
----------
-- Base classes and conception
-- Base board data input
-- Unit Test
+-----
+    - Base classes and conception
+    - Base board data input
+    - Threads for networking
+    - Unit Test
+
+
+Un tutoriel sur les fichiers **.md** (markdown language) peut être trouvé *_[ici](http://www.daringfireball.net/projects/markdown/basics)_*.
