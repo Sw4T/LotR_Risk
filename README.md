@@ -16,6 +16,7 @@ Doing
 -----
     - Base classes and conception
     - Base board data input
+    - Threads for networking
     - Unit Test
 
 
