@@ -1,6 +1,7 @@
 package net;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -8,26 +9,29 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ThreadConnexion implements Runnable {
 
 	private ServerSocket serveur;
-	protected static AtomicBoolean traitementTermine; //Boolean pouvant être modifié dans n'importe quelle classe liée au package net
+	protected static AtomicBoolean hasFinished; //Boolean pouvant ï¿½tre modifiï¿½ dans n'importe quelle classe liï¿½e au package net
 	
 	public ThreadConnexion() {
 		try {
 			this.serveur = new ServerSocket(9876);
 		} catch (IOException e) {e.printStackTrace();}
-		ThreadConnexion.traitementTermine = new AtomicBoolean(true);
+		ThreadConnexion.hasFinished = new AtomicBoolean(false);
 	}
 	
 	@Override
 	public void run() {
 		Socket socketEntree = null;
-		while (ThreadConnexion.traitementTermine.get()) //Vérifie si une connexion est achevée ou non
+		while (!ThreadConnexion.hasFinished.get()) //Vï¿½rifie si une connexion est achevï¿½e ou non
 		{
 			try {
 				socketEntree = this.serveur.accept();
-				ThreadConnexion.traitementTermine.set(false);
-				System.out.println("Un client avec l'adresse " + socketEntree.getInetAddress().getHostAddress() + " se connecte..");
-				System.out.println("Serveur : Allo j'écoute ?");
 				new Thread(new ThreadReception(socketEntree.getInputStream())).start();
+				System.out.println("Un client avec l'adresse " + socketEntree.getInetAddress().getHostAddress() + " se connecte..");
+				System.out.println("Serveur : Allo j'ï¿½coute ?");
+				/*PrintWriter pr = new PrintWriter(socketEntree.getOutputStream());
+				pr.println("tgapo");
+				pr.flush();*/
+				
 			} catch (IOException e) {e.printStackTrace();}
 		}
 		try {

@@ -16,8 +16,10 @@ public class ThreadReception implements Runnable {
 
 	@Override
 	public void run() {
-	
-			System.out.println(afficherMessage());
+		System.out.println(afficherMessage());
+		System.out.println(afficherMessage());
+		System.out.println(afficherMessage());
+		System.out.println(afficherMessage());
 		
 	}
 	
@@ -28,6 +30,6 @@ public class ThreadReception implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "Rien reçu";
+		return "Rien reÃ§u";
 	}
 }
