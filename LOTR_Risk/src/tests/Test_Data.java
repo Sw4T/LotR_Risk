@@ -17,7 +17,6 @@ public class Test_Data {
 	private Region region;
 	private Territoire territoire;
 	private Joueur joueur;
-	//TU VAS TE
 	
 	@Before
 	public void setUp() throws Exception {
