@@ -7,7 +7,7 @@ public class Territoire {
 	private boolean has_Hero;
 	private boolean has_Stronghold;
 	
-	public Territoire(String name, boolean has_Stronghold, TypeTerritoire type)
+	public Territoire(String name, boolean has_Stronghold)
 	{
 		this.nom = name;
 		this.has_Stronghold = has_Stronghold;
