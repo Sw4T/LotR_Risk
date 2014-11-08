@@ -7,11 +7,11 @@ public class Territoire {
 	private boolean has_Hero;
 	private boolean has_Stronghold;
 	
-	public Territoire(String name, boolean has_Stronghold)
+	public Territoire(String name, boolean has_Stronghold, TypeTerritoire type)
 	{
 		this.nom = name;
 		this.has_Stronghold = has_Stronghold;
-		this.nb_unite = 0;
+		this.nb_unite = 0;//SEIKOMIISYT
 	}
 	
 	public void add_Units(int nbUnitToAdd) {
