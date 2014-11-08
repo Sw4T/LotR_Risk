@@ -11,7 +11,7 @@ public class Territoire {
 	{
 		this.nom = name;
 		this.has_Stronghold = has_Stronghold;
-		this.nb_unite = 0;
+		this.nb_unite = 0;//SEIKOMIISYT
 	}
 	
 	public void add_Units(int nbUnitToAdd) {
