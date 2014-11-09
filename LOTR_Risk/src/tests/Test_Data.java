@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import objects.Joueur;
 import objects.Region;
 import objects.Territoire;
+import objects.TypeTerritoire;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,8 +21,8 @@ public class Test_Data {
 	
 	@Before
 	public void setUp() throws Exception {
-		region = new Region("testRegion", 5);
-		territoire = new Territoire("testTerritoire", false);
+		region = new Region("Rhûn", 5);
+		territoire = new Territoire("testTerritoire", false, TypeTerritoire.BIEN);
 		joueur = new Joueur("Arthure");
 		data = new LOTR_Data();
 	}
@@ -33,7 +34,7 @@ public class Test_Data {
 		data = null;
 		territoire = null;
 	}
-
+	
 	@Test
 	public void test_add_region_territoire() {
 		region.add_Territoire(territoire);
@@ -55,8 +56,28 @@ public class Test_Data {
 	
 	@Test
 	public void test_get_Region_ByName() {
-		region.setNom("Arnor");
-		assertEquals(data.getRegionByName("Arnor").getNom(), region.getNom());
+		assertEquals(data.getRegionByName("Rhûn").getNom(), region.getNom());
 	}
+	
+	@Test
+	public void test_player_has_Region() {
+		joueur.add_Territoire(new Territoire("Esgaroth", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Sud", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Nord", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Mithlond", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Landes Desséchée", false, TypeTerritoire.MAL));
+		assertEquals(data.playerHasRegion(joueur, "Rhûn"), true);
+	}
+	
+	@Test
+	public void test_player_has_not_Region() {
+		joueur.add_Territoire(new Territoire("Esgaroth", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Sud", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Nord", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Mithlond", false, TypeTerritoire.MAL));
+		assertEquals(data.playerHasRegion(joueur, "Rhûn"), false);
+	}
+	
+	
 
 }
