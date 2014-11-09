@@ -1,17 +1,22 @@
 package objects;
 
-public class Territoire {
+import java.io.Serializable;
 
+public class Territoire implements Serializable {
+
+	private static final long serialVersionUID = -7228052548724269283L;
 	private String nom;
+	private TypeTerritoire type_T;
 	private int nb_unite;
 	private boolean has_Hero;
 	private boolean has_Stronghold;
 	
-	public Territoire(String name, boolean has_Stronghold)
+	public Territoire(String name, boolean has_Stronghold, TypeTerritoire type)
 	{
 		this.nom = name;
 		this.has_Stronghold = has_Stronghold;
-		this.nb_unite = 0;//SEIKOMIISYT
+		this.nb_unite = 0;
+		this.type_T = type;
 	}
 	
 	public void add_Units(int nbUnitToAdd) {
@@ -45,5 +50,23 @@ public class Territoire {
 
 	public boolean has_Stronghold() {
 		return has_Stronghold;
+	}
+
+	public TypeTerritoire getType_T() {
+		return type_T;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (o == this)
+			return true;
+		if (!(o instanceof Territoire))
+			return false;
+		Territoire t = (Territoire) o;
+		if (this.nom.equals(t.getNom()))
+			return true;
+		return false;
 	}
 }
