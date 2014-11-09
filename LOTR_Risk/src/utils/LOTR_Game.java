@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import objects.Joueur;
@@ -14,7 +15,7 @@ public class LOTR_Game {
 	private LOTR_Data data;
 	private ThreadConnexion threadCon;
 	
-	public LOTR_Game() {
+	public LOTR_Game() throws IOException {
 		this.data = new LOTR_Data(); //Données du plateau initiales
 		this.threadCon = new ThreadConnexion();
 		new Thread(threadCon).start();
@@ -25,13 +26,12 @@ public class LOTR_Game {
 	 * @param args
 	 */
 	public static void main(String [] args) {
-		LOTR_Game jeu = new LOTR_Game();
-		jeu.init_Joueurs();	
-	}
-	
-	public void init_Joueurs() 
-	{
-		
+		LOTR_Game jeu = null;
+		try {
+			jeu = new LOTR_Game();	
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
