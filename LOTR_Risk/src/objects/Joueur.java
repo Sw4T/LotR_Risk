@@ -1,9 +1,11 @@
 package objects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Joueur {
+public class Joueur implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private String nom;
 	private int nb_unites;
 	private int score;
@@ -21,7 +23,7 @@ public class Joueur {
 		if (!this.has_Territoire(t))
 			this.listTerritoire.add(t);	
 	}
-	
+
 	public void remove_Territoire(Territoire t) {
 		if (this.has_Territoire(t)) 
 			this.listTerritoire.remove(t);
@@ -49,6 +51,10 @@ public class Joueur {
 
 	public String getNom() {
 		return nom;
+	}
+	
+	public ArrayList<Territoire> getListTerritoire() {
+		return listTerritoire;
 	}
 	
 }
