@@ -1,33 +1,40 @@
 package net;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+
+import objects.Joueur;
 
 public class Emission {
 
-	private PrintWriter printer;
+	private ObjectOutputStream obj_out;
 	private ThreadEnvoiReception T_Reception;
 	
-	public Emission(OutputStream os, ThreadEnvoiReception T_Read) {
-		this.printer = new PrintWriter(os, true);
+	public Emission(OutputStream os, ThreadEnvoiReception T_Read) throws IOException {
+		this.obj_out = new ObjectOutputStream(os);	
 		this.T_Reception = T_Read;
 	}
 	
-	public void sendMultipleStrings(String[] tabStr)
-	{
-		for (int i = 0; i < tabStr.length; i++) {
-			sendString(tabStr[i]);
+	public void sendJoueur(Joueur j) throws IOException {
+		if (this.T_Reception.isSendMode() == true) {
+			this.obj_out.writeObject(j);
+			this.obj_out.flush();
 		}
 	}
 	
-	public void sendString(String message) {
-		if (this.T_Reception.isSendMode() == true)
-			this.printer.println(message);
+	public void sendString(String message) throws IOException {
+		if (this.T_Reception.isSendMode() == true) {
+			this.obj_out.writeObject(message);
+			this.obj_out.flush();
+		}
 	}
 	
-	public void sendInt(int toSend) {
-		if (this.T_Reception.isSendMode() == true)
-			this.printer.println(toSend);
+	public void sendInt(int toSend) throws IOException {
+		if (this.T_Reception.isSendMode() == true) {
+			this.obj_out.writeObject(toSend);
+			this.obj_out.flush();
+		}
 	}
 
 }
