@@ -6,7 +6,7 @@ public class Region {
 
 	private String nom;
 	private ArrayList<Territoire> tabTerritoire;
-	private int nb_renforts;
+	private int nb_renforts; //Nombre de renforts lorsque région possédé entièrement
 	
 	public Region(String name, int nb_renf)
 	{
@@ -14,7 +14,7 @@ public class Region {
 		this.nb_renforts = nb_renf;
 		this.tabTerritoire = new ArrayList<Territoire>();
 	}
-	
+
 	public void add_Territoire(Territoire t) {
 		if (!this.tabTerritoire.contains(t))
 			this.tabTerritoire.add(t);			
@@ -44,5 +44,9 @@ public class Region {
 
 	public int getNb_Renforts() {
 		return nb_renforts;
+	}
+	
+	public ArrayList<Territoire> getListTerritoire() {
+		return tabTerritoire;
 	}
 }
