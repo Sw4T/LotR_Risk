@@ -11,10 +11,8 @@ public class ThreadConnexion implements Runnable {
 	private ThreadEnvoiReception T_DATA;
 	protected static AtomicBoolean hasFinished; //Boolean pouvant �tre modifi� dans n'importe quelle classe li�e au package net
 	
-	public ThreadConnexion() {
-		try {
-			this.serveur = new ServerSocket(9876);
-		} catch (IOException e) {e.printStackTrace();}
+	public ThreadConnexion() throws IOException {
+		this.serveur = new ServerSocket(9876);
 		ThreadConnexion.hasFinished = new AtomicBoolean(false); 
 	}
 	
