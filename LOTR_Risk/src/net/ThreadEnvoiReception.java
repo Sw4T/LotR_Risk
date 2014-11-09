@@ -3,17 +3,20 @@ package net;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.Socket;
+
+import objects.Joueur;
 
 public class ThreadEnvoiReception implements Runnable {
 
-	private BufferedReader bufferLecture;
+	private ObjectInputStream obj_in;
 	private Emission bufferSortie;
 	private boolean isSendMode;
 	
 	public ThreadEnvoiReception(Socket soc) throws IOException {
-		this.bufferLecture = new BufferedReader(new InputStreamReader(soc.getInputStream()));
 		this.bufferSortie = new Emission(soc.getOutputStream(), this);
+		this.obj_in = new ObjectInputStream(soc.getInputStream());
 		this.isSendMode = false; //Boolean servant à vérifier si la classe peut emettre ou non
 	}
 
@@ -23,8 +26,13 @@ public class ThreadEnvoiReception implements Runnable {
 		while (!(messageEntrant = getString()).equals("tg")) 
 		{
 			switch (messageEntrant) {
-				case "j" : getInfosJoueurs();
-						   break;
+				case "obj" : try {
+					Joueur j = getJoueur();
+					System.out.println("Nom du joueur reçu : " + j.getNom());
+				} 
+				catch (ClassNotFoundException e) {e.printStackTrace();} 
+				catch (IOException e) {e.printStackTrace();}
+						  break;
 				default : System.out.println("Client : " + messageEntrant);
 			}
 		}
@@ -44,12 +52,16 @@ public class ThreadEnvoiReception implements Runnable {
 		return toReturn;
 	}
 	
+	public Joueur getJoueur() throws ClassNotFoundException, IOException {
+		return (Joueur) (this.obj_in.readObject());
+	}
+	
 	public String getString() 
 	{
 		try {
 			if (!isSendMode) 
-				return (this.bufferLecture.readLine());
-		} catch (IOException e) {
+				return (String) (this.obj_in.readObject());
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return "Rien reçu";
@@ -57,8 +69,8 @@ public class ThreadEnvoiReception implements Runnable {
 	
 	public int getInt() {
 		try {
-			return (Integer.parseInt(this.bufferLecture.readLine()));
-		} catch (NumberFormatException | IOException e) {
+			return (Integer.parseInt(getString()));
+		} catch (NumberFormatException e) {
 			return -1;
 		}
 	}
