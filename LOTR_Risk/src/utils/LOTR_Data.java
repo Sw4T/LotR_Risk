@@ -61,6 +61,18 @@ public class LOTR_Data {
 		return true;
 	}
 	
+	public int calculer_Renforts(Joueur j)
+	{
+		if (j.getNb_Territoire() < 12)
+			return 3;
+		int renforts = j.getNb_Territoire() / 3;
+		for (Region r : this.mapRegion) {
+			if (this.playerHasRegion(j, r.getNom()))
+				renforts += r.getNb_Renforts();
+		}
+		return renforts;
+	}
+	
 	private Region init_list_Territoire_Rohan()
 	{
 		Region r = new Region("Rohan", 4);

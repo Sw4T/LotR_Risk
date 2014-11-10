@@ -55,12 +55,24 @@ public class Test_Data {
 	}
 	
 	@Test
+	public void test_joueur_get_nb_territoire() {
+		joueur.add_Territoire(territoire);
+		joueur.add_Territoire(new Territoire("1", false, TypeTerritoire.BIEN));
+		joueur.add_Territoire(new Territoire("2", false, TypeTerritoire.BIEN));
+		assertEquals(joueur.getNb_Territoire(), 3);
+		joueur.remove_Territoire_FromName("");
+		assertEquals(joueur.getNb_Territoire(), 3);
+		joueur.remove_Territoire_FromName("1");
+		assertEquals(joueur.getNb_Territoire(), 2);
+	}
+	
+	@Test
 	public void test_get_Region_ByName() {
 		assertEquals(data.getRegionByName("Rhûn").getNom(), region.getNom());
 	}
 	
 	@Test
-	public void test_player_has_Region() {
+	public void test_joueur_has_Region() {
 		joueur.add_Territoire(new Territoire("Esgaroth", false, TypeTerritoire.NEUTRE));
 		joueur.add_Territoire(new Territoire("Rhûn du Sud", false, TypeTerritoire.NEUTRE));
 		joueur.add_Territoire(new Territoire("Rhûn du Nord", false, TypeTerritoire.NEUTRE));
@@ -70,7 +82,7 @@ public class Test_Data {
 	}
 	
 	@Test
-	public void test_player_has_not_Region() {
+	public void test_joueur_has_not_Region() {
 		joueur.add_Territoire(new Territoire("Esgaroth", false, TypeTerritoire.NEUTRE));
 		joueur.add_Territoire(new Territoire("Rhûn du Sud", false, TypeTerritoire.NEUTRE));
 		joueur.add_Territoire(new Territoire("Rhûn du Nord", false, TypeTerritoire.NEUTRE));
@@ -78,6 +90,69 @@ public class Test_Data {
 		assertEquals(data.playerHasRegion(joueur, "Rhûn"), false);
 	}
 	
+	@Test
+	public void test_joueur_renforts_simple() {
+		joueur.add_Territoire(new Territoire("Esgaroth", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Sud", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Nord", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Mithlond", false, TypeTerritoire.MAL));
+		assertEquals(data.calculer_Renforts(joueur), 3);
+	}	
 	
-
+	@Test
+	public void test_joueur_renforts_14_territoire() {
+		joueur.add_Territoire(new Territoire("Esgaroth", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Sud", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Nord", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("c", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("b", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("a", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("D", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("M", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mi", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mit", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mith", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mithl", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mithlo", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mithlon", false, TypeTerritoire.MAL));
+		assertEquals(data.calculer_Renforts(joueur), 4);
+	}
+	
+	@Test
+	public void test_joueur_renforts_14_territoire_and_region() {
+		joueur.add_Territoire(new Territoire("Esgaroth", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Sud", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Nord", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Landes Desséchée", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("b", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("a", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("D", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("M", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mi", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mit", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mith", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mithl", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mithlo", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mithlon", false, TypeTerritoire.MAL));
+		assertEquals(data.calculer_Renforts(joueur), 6); //Rhun = 2
+	}
+	
+	@Test
+	public void test_joueur_renforts_14_territoire_and_2_region() {
+		joueur.add_Territoire(new Territoire("Esgaroth", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Sud", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Nord", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Landes Desséchée", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Pays des Vieux Biscornus", true, TypeTerritoire.BIEN));
+		joueur.add_Territoire(new Territoire("Trouée du Rohan", false, TypeTerritoire.BIEN));
+		joueur.add_Territoire(new Territoire("Fangorn", true, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Enedwaith", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Miniriath", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Eregion", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Pays de Dun", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Mithl", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mithlo", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mithlon", false, TypeTerritoire.MAL));
+		assertEquals(data.calculer_Renforts(joueur), 10); //Rohan + Rhun = 6
+	}
 }

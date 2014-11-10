@@ -29,8 +29,22 @@ public class Joueur implements Serializable {
 			this.listTerritoire.remove(t);
 	}
 	
+	public void remove_Territoire_FromName(String str) {
+		for (Territoire t : this.listTerritoire) {
+			if (t.getNom().equals(str)) {
+				this.remove_Territoire(t);
+				return;
+			}
+		}
+	}
+	
 	public boolean has_Territoire(Territoire t) {
 		return this.listTerritoire.contains(t);
+	}
+	
+	public int getNb_Territoire()
+	{
+		return this.listTerritoire.size();
 	}
 	
 	public int getNb_unites() {
