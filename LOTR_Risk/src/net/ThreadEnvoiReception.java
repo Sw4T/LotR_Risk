@@ -1,17 +1,16 @@
 package net;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import objects.Joueur;
 
 public class ThreadEnvoiReception implements Runnable {
 
 	private ObjectInputStream obj_in;
-	private Emission bufferSortie;
+	private Emission bufferSortie; //TODO
 	private boolean isSendMode;
 	
 	public ThreadEnvoiReception(Socket soc) throws IOException {
@@ -27,8 +26,7 @@ public class ThreadEnvoiReception implements Runnable {
 		{
 			switch (messageEntrant) {
 				case "obj" : try {
-					Joueur j = getJoueur();
-					System.out.println("Nom du joueur reçu : " + j.getNom());
+					getInfosJoueurs();
 				} 
 				catch (ClassNotFoundException e) {e.printStackTrace();} 
 				catch (IOException e) {e.printStackTrace();}
@@ -38,41 +36,56 @@ public class ThreadEnvoiReception implements Runnable {
 		}
 	}
 	
-	public Object[] getInfosJoueurs() {
+	public ArrayList<Joueur> getInfosJoueurs() throws ClassNotFoundException, IOException {
 		int nbJoueurs = getInt();
 		if (nbJoueurs == - 1)
 			return null;
-		
-		Object[] toReturn = new Object[nbJoueurs + 1];
-		toReturn[0] = nbJoueurs;
-		for (int i = 1; i <= nbJoueurs; i++) {
-			toReturn[i] = getString();
-			System.out.println("Joueur " + i + " : " + toReturn[i]);
+		ArrayList<Joueur> toReturn = new ArrayList<Joueur>(nbJoueurs);
+		for (int i = 0; i < nbJoueurs; i ++) {
+			Joueur joueurRecu = getJoueur();
+			if (!toReturn.contains(joueurRecu)) {
+				toReturn.add(joueurRecu);
+				System.out.println("Joueur ajout� : " + joueurRecu.getNom());
+			}
 		}
 		return toReturn;
 	}
 	
 	public Joueur getJoueur() throws ClassNotFoundException, IOException {
-		return (Joueur) (this.obj_in.readObject());
+		try {
+			Object objRecu = this.obj_in.readObject();
+			if (!(objRecu instanceof Joueur))
+				return null;
+			return ((Joueur) objRecu);
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public String getString() 
 	{
 		try {
-			if (!isSendMode) 
-				return (String) (this.obj_in.readObject());
+			Object objRecu = this.obj_in.readObject();
+			if (!(objRecu instanceof String))
+				return null;
+			return ((String) objRecu);
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return "Rien reçu";
+		return null;
 	}
 	
-	public int getInt() {
+	public Integer getInt() {
 		try {
-			return (Integer.parseInt(getString()));
-		} catch (NumberFormatException e) {
-			return -1;
+			Object objRecu = this.obj_in.readObject();
+			if (!(objRecu instanceof Integer))
+				return null;
+			return ((Integer) objRecu);
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	public boolean isSendMode() {
