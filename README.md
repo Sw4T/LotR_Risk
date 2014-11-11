@@ -7,6 +7,7 @@ ToDo
 ----
     - GUI
     - Implement game rules
+    - Base Android classes and objects
     - Send messages to Android app
     - Log of events
     - Image Writing and analysis
