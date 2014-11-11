@@ -11,11 +11,12 @@ ToDo
     - Implement game rules
     - Log of events
     - Image Writing and analysis
+    - Exceptions/errors
 
 Doing
 -----
-    - Base classes and conception
-    - Base board data input
+    - Methods to fetch data
+    - Finishing conception
     - Threads for networking
     - Unit Test
 
