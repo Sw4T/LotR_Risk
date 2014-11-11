@@ -11,6 +11,7 @@ ToDo
     - Log of events
     - Image Writing and analysis
     - Exceptions/errors
+    - Refactoring
 
 Doing
 -----
