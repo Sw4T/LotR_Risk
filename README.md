@@ -5,10 +5,9 @@ LOTR Risk board game support for Java &amp; Android in development
 
 ToDo
 ----
-    - Base classes and objects
-    - Base data from game board
     - GUI
     - Implement game rules
+    - Send messages to Android app
     - Log of events
     - Image Writing and analysis
     - Exceptions/errors
