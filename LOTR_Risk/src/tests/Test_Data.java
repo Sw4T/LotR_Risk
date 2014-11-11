@@ -1,6 +1,9 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+
 import objects.Joueur;
 import objects.Region;
 import objects.Territoire;
@@ -154,5 +157,11 @@ public class Test_Data {
 		joueur.add_Territoire(new Territoire("Mithlo", false, TypeTerritoire.MAL));
 		joueur.add_Territoire(new Territoire("Mithlon", false, TypeTerritoire.MAL));
 		assertEquals(data.calculer_Renforts(joueur), 10); //Rohan + Rhun = 6
+	}
+	
+	@Test
+	public void test_generate_4_territoires() {
+		ArrayList<Territoire> toTest = data.generateRandomTerritoiresFromType(TypeTerritoire.BIEN, 4);
+		assertEquals(toTest.size(), 4);
 	}
 }
