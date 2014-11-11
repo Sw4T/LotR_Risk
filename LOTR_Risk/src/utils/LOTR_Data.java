@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import objects.Joueur;
 import objects.Region;
@@ -26,29 +27,56 @@ public class LOTR_Data {
 		mapRegion.add(this.init_list_Territoire_Foret_Noire());  
 	}
 	
-	public Region getRegionByName(String str) 
+	
+	/**
+	 * Retourne <u>l'objet Region</u> associé au nom défini par <b>nomRegion</b>, retourne <u>null</u> sinon.
+	 * @param str
+	 */
+	public Region getRegionByName(String nomRegion) 
 	{
 		for (Region r : this.mapRegion)
 		{
-			if (r.getNom().equals(str)) {
+			if (r.getNom().equals(nomRegion)) {
 				return r;
 			}
 		}
 		return null;
 	}
 	
-	public ArrayList<Territoire> getListTerritoireFromType(TypeTerritoire type) {
+	/**
+	 * Génère une ArrayList comprenant <b>nbTerritoire</b> en fonction du type de territoire <b>type</b>.
+	 * @param type
+	 * @param nbTerritoire
+	 */
+	public ArrayList<Territoire> generateRandomTerritoiresFromType(TypeTerritoire type, int nbTerritoire) {
 		ArrayList<Territoire> toReturn = new ArrayList<Territoire>();
-		for (Region r : this.mapRegion) {
-			for (Territoire t : r.getListTerritoire()) {
-				if (t.getType_T() == type) {
-					toReturn.add(t);
+		ArrayList<Territoire> listTerritoireType = getListTerritoireFromType(type);
+		int tailleListe = listTerritoireType.size();
+		if (nbTerritoire > listTerritoireType.size()) {
+			return null;
+		}
+		Random random = new Random();
+		int chiffreRandom;
+		boolean trouve;
+		for (int i = 0; i < nbTerritoire; i++) 
+		{
+			trouve = false;
+			while (!trouve) {
+				chiffreRandom = random.nextInt(tailleListe);
+				if (!toReturn.contains(listTerritoireType.get(chiffreRandom))) {
+						toReturn.add(listTerritoireType.get(chiffreRandom));
+						trouve = true;
 				}
 			}
 		}
 		return toReturn;
 	}
-	
+
+	/**
+	 * Retourne <u>true</u> si le joueur <b>j</b> possède la région de nom <b>nomRegion</b>.
+	 * @param j
+	 * @param nomRegion
+	 */
 	public boolean playerHasRegion(Joueur j, String nomRegion) {
 		Region r = getRegionByName(nomRegion);
 		if (r != null) {
@@ -61,6 +89,10 @@ public class LOTR_Data {
 		return true;
 	}
 	
+	/**
+	 * Retourne le <u>nombre de renforts</u> disponibles du joueur <b>j</b> en fonction de la liste des territoires qu'il possède.
+	 * @param j
+	 */
 	public int calculer_Renforts(Joueur j)
 	{
 		if (j.getNb_Territoire() < 12)
@@ -71,6 +103,18 @@ public class LOTR_Data {
 				renforts += r.getNb_Renforts();
 		}
 		return renforts;
+	}
+	
+	private ArrayList<Territoire> getListTerritoireFromType(TypeTerritoire type) {
+		ArrayList<Territoire> toReturn = new ArrayList<Territoire>();
+		for (Region r : this.mapRegion) {
+			for (Territoire t : r.getListTerritoire()) {
+				if (t.getType_T() == type) {
+					toReturn.add(t);
+				}
+			}
+		}
+		return toReturn;
 	}
 	
 	private Region init_list_Territoire_Rohan()
