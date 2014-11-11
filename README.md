@@ -13,6 +13,7 @@ ToDo
     - Image Writing and analysis
     - Exceptions/errors
     - Refactoring
+    - Javadoc
 
 Doing
 -----
