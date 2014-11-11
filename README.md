@@ -13,7 +13,6 @@ ToDo
     - Image Writing and analysis
     - Exceptions/errors
     - Refactoring
-    - Javadoc
 
 Doing
 -----
@@ -23,6 +22,7 @@ Doing
     - Finishing conception
     - Threads for networking
     - Unit Test
+    - Javadoc
 
 
 * * *
