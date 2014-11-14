@@ -21,7 +21,7 @@ public class DonneesConnexion {
 			this.isSendMode = false;
 	}
 
-	public Boolean connexionServeur(String servAddr, int port)
+	private Boolean connexionServeur(String servAddr, int port)
 	{
 		try {
 			this.socket = new Socket();
@@ -38,55 +38,5 @@ public class DonneesConnexion {
 	public boolean get_Connexion_Reussi() {
 		return this.isSendMode;
 	}
-	/*
-	public ArrayList<Joueur> getInfosJoueurs() throws ClassNotFoundException, IOException {
-		int nbJoueurs = getInt();
-		if (nbJoueurs == - 1)
-			return null;
-		ArrayList<Joueur> toReturn = new ArrayList<Joueur>(nbJoueurs);
-		for (int i = 0; i < nbJoueurs; i ++) {
-			Joueur joueurRecu = getJoueur();
-			if (!toReturn.contains(joueurRecu)) {
-				toReturn.add(joueurRecu);
-				System.out.println("Joueur ajout� : " + joueurRecu.getNom());
-			}
-		}
-		return toReturn;
-	}
 	
-	public Joueur getJoueur() throws ClassNotFoundException, IOException {
-		try {
-			Object objRecu = this.obj_in.readObject();
-			if (!(objRecu instanceof Joueur))
-				return null;
-			return ((Joueur) objRecu);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public String getString() 
-	{
-		try {
-			Object objRecu = this.obj_in.readObject();
-			if (!(objRecu instanceof String))
-				return null;
-			return ((String) objRecu);
-		} catch (IOException e) {e.printStackTrace();
-		} catch (ClassNotFoundException e) {e.printStackTrace();}
-		return null;
-	}
-	
-	public Integer getInt() {
-		try {
-			Object objRecu = this.obj_in.readObject();
-			if (!(objRecu instanceof Integer))
-				return null;
-			return ((Integer) objRecu);
-		} catch (IOException e) {e.printStackTrace();
-		} catch (ClassNotFoundException e) {e.printStackTrace();}
-		return null;
-	}
-	*/
 }
