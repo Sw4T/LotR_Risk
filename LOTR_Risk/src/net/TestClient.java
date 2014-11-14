@@ -24,7 +24,7 @@ public class TestClient {
 			String entreeJoueur;
 			do
 			{
-				if (entree != null && !entree.equals("")) {
+				if (entree != null && !entree.equals("") && !entree.equals("obj")) {
 					envoyerObject(oos, entree);
 				}
 				if (entree != null && entree.equals("obj")) 
