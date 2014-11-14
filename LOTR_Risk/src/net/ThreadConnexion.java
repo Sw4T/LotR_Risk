@@ -25,23 +25,27 @@ public class ThreadConnexion extends Thread {
 			try {
 				socketEntree = this.serveur.accept();
 				System.out.println("Un client avec l'adresse " + socketEntree.getInetAddress().getHostAddress() + " se connecte..");
-				System.out.println("Serveur : Allo j'�coute ?");
+				System.out.println("Serveur : Allo j'écoute ?");
 				this.T_DATA = new ThreadEnvoiReception(socketEntree);
-			} catch (IOException e) {e.printStackTrace();}
+			} catch (IOException e) { System.out.println("Le serveur ferme ses portes...");}
 		}
-		try {
-			this.serveur.close();
-			System.out.println("Arrêt du serveur...");
-		} catch (IOException e) {e.printStackTrace();}
 	}
 	
-	public void close() {
+	public boolean isServeurFinished() {
+		return (this.hasFinished.get());
+	}
+	
+	public void close() throws Throwable {
+		this.serveur.close();
 		this.hasFinished.set(true);
+		this.finalize();
 	}
 	
 	public ThreadEnvoiReception getThreadDonnees() {
 		return this.T_DATA;
 	}
-
 	
+	public void setThreadDonnees(ThreadEnvoiReception t_DATA) {
+		this.T_DATA = t_DATA;
+	}
 }

@@ -9,11 +9,9 @@ import objects.Joueur;
 public class Emission {
 
 	private ObjectOutputStream obj_out;
-	private ThreadEnvoiReception T_Reception;
 	
-	public Emission(OutputStream os, ThreadEnvoiReception T_Read) throws IOException {
+	public Emission(OutputStream os) throws IOException {
 		this.obj_out = new ObjectOutputStream(os);	
-		this.T_Reception = T_Read;
 	}
 	
 	public void sendJoueur(Joueur j) throws IOException {
