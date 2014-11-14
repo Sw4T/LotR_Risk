@@ -161,7 +161,10 @@ public class Test_Data {
 	
 	@Test
 	public void test_generate_4_territoires() {
-		ArrayList<Territoire> toTest = data.generateRandomTerritoiresFromType(TypeTerritoire.BIEN, 4);
+		ArrayList<Territoire> allTerritoires = data.getAllTerritoires();
+		assertEquals(allTerritoires.size(), 42); //Nombre de territoires total
+		ArrayList<Territoire> toTest = data.generateRandomTerritoiresFromType(TypeTerritoire.BIEN, 4, allTerritoires);
 		assertEquals(toTest.size(), 4);
+		assertEquals(allTerritoires.size(), 38);
 	}
 }
