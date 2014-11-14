@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Joueur implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3138516806578033883L;
 	private String nom;
 	private int nb_unites;
 	private int score;
@@ -23,6 +23,14 @@ public class Joueur implements Serializable {
 		if (!this.has_Territoire(t))
 			this.listTerritoire.add(t);	
 	}
+	
+	public void add_Territoires_From_List(ArrayList<Territoire> list) {
+		for (Territoire t : list) {
+			if (!this.has_Territoire(t)) {
+				this.listTerritoire.add(t);
+			}
+		}
+	}
 
 	public void remove_Territoire(Territoire t) {
 		if (this.has_Territoire(t)) 
@@ -37,7 +45,7 @@ public class Joueur implements Serializable {
 			}
 		}
 	}
-	
+
 	public boolean has_Territoire(Territoire t) {
 		return this.listTerritoire.contains(t);
 	}
@@ -67,8 +75,35 @@ public class Joueur implements Serializable {
 		return nom;
 	}
 	
+	public void setListTerritoire(ArrayList<Territoire> listTerritoire) {
+		this.listTerritoire = listTerritoire;
+	}
+	
 	public ArrayList<Territoire> getListTerritoire() {
 		return listTerritoire;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (o == this)
+			return true;
+		if (!(o instanceof Joueur))
+			return false;
+		Joueur j = (Joueur) o;
+		if (this.nom.equals(j.getNom()))
+			return true;
+		return false;
+	}
 	
+	@Override
+	public String toString() {
+		StringBuffer str = new StringBuffer();
+		str.append(this.nom + " possède : \n\t");
+		for (int i = 0; i < this.listTerritoire.size(); i++) {
+			str.append(this.listTerritoire.get(i).getNom() + "\n\t");
+		}
+		return str.toString();
+	}	
 }
