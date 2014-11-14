@@ -24,6 +24,11 @@ Doing
     - Unit Test
     - Javadoc
 
+**Seikomi**
+
+    - GUI
+    - Controllers
+    - Image scale and analysis
 
 * * *
 Un tutoriel sur les fichiers **.md** (markdown language) peut être trouvé *_[ici](http://www.daringfireball.net/projects/markdown/basics)_*.
