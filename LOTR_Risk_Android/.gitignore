@@ -25,3 +25,4 @@ proguard/
 # Log Files
 *.log
 proguard_project.txt
+project.properties
