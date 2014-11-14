@@ -8,6 +8,10 @@ Description des packages
 * * *
         Objets servant à modéliser les données du plateau risk
 * * *
+##### *SwingGUI*
+* * *
+        Classes définissant l'interface Swing du client JAVA
+* * *
 ##### *utils*
 * * *
         Classes définissant le comportement du serveur ainsi que le regroupement des données générales
