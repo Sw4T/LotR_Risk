@@ -2,20 +2,18 @@ package utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
+import net.ThreadConnexion;
+import net.ThreadEnvoiReception;
 import objects.Joueur;
 import objects.Territoire;
 import objects.TypeTerritoire;
-import net.ThreadConnexion;
 
-
-
-public class LOTR_Game {
+public class LOTR_Game implements InterfaceLOTR {
 
 	private ArrayList<Joueur> tabJoueur;
 	private LOTR_Data data;
-	private ThreadConnexion threadCon;
+	private ThreadConnexion threadCon; //Thread gérant les connexion entrantes
 	
 	public LOTR_Game() throws IOException {
 		this.data = new LOTR_Data(); //Données du plateau initiales
@@ -31,25 +29,37 @@ public class LOTR_Game {
 		LOTR_Game jeu = null;
 		try {
 			jeu = new LOTR_Game();	
-			Scanner scan = new Scanner(System.in);
-			System.out.println("Entrez \"go\" pour démarrer la procédure après que le client se soit connecté");
-			while (!scan.nextLine().equals("go"));
-			scan.close();
-			if (jeu.init_joueurs_territoires()) {
-				for (int i = 0; i < jeu.getTabJoueurs().size(); i++) {
-					System.out.println(jeu.getTabJoueurs().get(i));
-				}
-				jeu.getThreadConnexion().close();
+			Integer constanteTraitement;
+			while (jeu.getThreadConnexion().getThreadDonnees() == null) { //Attente de la connexion client
+				Thread.sleep(1000); 
 			}
-			else
-				System.out.println("DER IS A PROBLEM");
-		} catch (IOException | ClassNotFoundException | InterruptedException e) {
+			do {
+				constanteTraitement = jeu.recupererTraitement(); //Récupère l'entier définissant une constante
+				if (constanteTraitement != null) {
+					switch (constanteTraitement.intValue()) {
+						case PROCEDURE_JOUEURS :
+							if (jeu.init_joueurs_territoires()) { //Retourne true si la procédure a bien aboutie
+								for (int i = 0; i < jeu.getTabJoueurs().size(); i++) {
+									System.out.println(jeu.getTabJoueurs().get(i));
+								}
+							} else
+								System.out.println("Erreur lors de l'initialisation des joueurs");
+							break;
+						case FERMER_SERVEUR : 
+							jeu.getThreadConnexion().close(); //Ferme le serveur
+							break;
+						default : System.out.println("Constante non implémentée ou inconnue");
+					}
+				} else
+					System.out.println("Format de données invalide");
+			} while (!jeu.getThreadConnexion().isServeurFinished()); 
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}
 
 	public boolean init_joueurs_territoires() throws ClassNotFoundException, IOException, InterruptedException {
-		System.out.println("Lancement de la procédure pour l'envoi de joueur");
+		System.out.println("Lancement de la procédure pour la création des joueurs");
 		this.tabJoueur = getJoueurs();
 		if (this.tabJoueur == null)
 			return false;
@@ -82,19 +92,29 @@ public class LOTR_Game {
 		}
 		return true;
 	}
+
+	public ArrayList<Joueur> getJoueurs() throws ClassNotFoundException, IOException, InterruptedException {
+		this.threadCon.getThreadDonnees().definirTraitementEtExecuter(PROCEDURE_JOUEURS);
+		this.threadCon.getThreadDonnees().join();
+		ThreadEnvoiReception newThread = this.threadCon.getThreadDonnees().clone();
+		this.threadCon.setThreadDonnees(newThread); //Copie l'ancienne classe pour pouvoir reéxécuter la méthode run()
+		return (this.threadCon.getThreadDonnees().getListJoueur());
+	}	
+	
+	/**
+	 * Retourne la <b>constante</b> de type entier reçu depuis l'application distante, <b>-1</b> si la connexion n'existe pas.
+	 */
+	public Integer recupererTraitement() {
+		if (this.threadCon.getThreadDonnees() != null)
+			return this.threadCon.getThreadDonnees().get_Constante_Jeu();
+		return (new Integer(-1));
+	}
 	
 	public ThreadConnexion getThreadConnexion() {
 		return threadCon;
-	}
-
-	public ArrayList<Joueur> getJoueurs() throws ClassNotFoundException, IOException, InterruptedException {
-		this.threadCon.getThreadDonnees().definirTraitementEtExecuter("RecepJoueurs");
-		this.threadCon.getThreadDonnees().join();
-		return (this.threadCon.getThreadDonnees().getListJoueur());
 	}
 	
 	public ArrayList<Joueur> getTabJoueurs() {
 		return tabJoueur;
 	}
-	
 }
