@@ -11,11 +11,13 @@ public class TacheConnexion extends AsyncTask<String, Void, DonneesConnexion> {
 	public TacheConnexion(Context context) {
 		this.context = context;
 	}
+	
 	@Override
 	protected DonneesConnexion doInBackground(String... params) {
 		String servAddr = params[0];
 		Integer port = Integer.parseInt(params[1]);
-		return (new DonneesConnexion(servAddr, port));	
+		DonneesConnexion connexion = new DonneesConnexion(servAddr, port);
+		return (connexion);	
 	}
 	
 	protected void onPostExecute(DonneesConnexion result) {	
