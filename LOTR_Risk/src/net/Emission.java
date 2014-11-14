@@ -17,24 +17,18 @@ public class Emission {
 	}
 	
 	public void sendJoueur(Joueur j) throws IOException {
-		if (this.T_Reception.isSendMode() == true) {
-			this.obj_out.writeObject(j);
-			this.obj_out.flush();
-		}
+		this.obj_out.writeObject(j);
+		this.obj_out.flush();
 	}
 	
 	public void sendString(String message) throws IOException {
-		if (this.T_Reception.isSendMode() == true) {
-			this.obj_out.writeObject(message);
-			this.obj_out.flush();
-		}
+		this.obj_out.writeObject(message);
+		this.obj_out.flush();
 	}
 	
 	public void sendInt(int toSend) throws IOException {
-		if (this.T_Reception.isSendMode() == true) {
-			this.obj_out.writeObject(toSend);
-			this.obj_out.flush();
-		}
+		this.obj_out.writeObject(toSend);
+		this.obj_out.flush();
 	}
 
 }
