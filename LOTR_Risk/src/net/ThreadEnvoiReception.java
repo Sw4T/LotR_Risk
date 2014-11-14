@@ -7,51 +7,55 @@ import java.util.ArrayList;
 
 import objects.Joueur;
 
-public class ThreadEnvoiReception implements Runnable {
+public class ThreadEnvoiReception extends Thread {
 
 	private ObjectInputStream obj_in;
 	private Emission bufferSortie; //TODO
+	private ArrayList<Joueur> listJoueur;
 	private boolean isSendMode;
+	private String traitement; //Sert à définir le traitement voulu
 	
 	public ThreadEnvoiReception(Socket soc) throws IOException {
+		super();
 		this.bufferSortie = new Emission(soc.getOutputStream(), this);
 		this.obj_in = new ObjectInputStream(soc.getInputStream());
-		this.isSendMode = false; //Boolean servant à vérifier si la classe peut emettre ou non
+		this.isSendMode = true; //Boolean servant à vérifier si la classe peut emettre ou non
 	}
 
 	@Override
 	public void run() {
-		String messageEntrant = "";
-		while (!(messageEntrant = getString()).equals("tg")) 
-		{
-			switch (messageEntrant) {
-				case "obj" : try {
-					getInfosJoueurs();
-				} 
-				catch (ClassNotFoundException e) {e.printStackTrace();} 
-				catch (IOException e) {e.printStackTrace();}
-						  break;
-				default : System.out.println("Client : " + messageEntrant);
+		if (traitement == null || traitement.equals(""))
+			return;
+		if (traitement.equals("RecepJoueurs"))
+			try {
+				this.listJoueur = getInfosJoueurs();
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+				this.listJoueur = null;
 			}
-		}
+		else
+			this.listJoueur = null;
 	}
 	
-	public ArrayList<Joueur> getInfosJoueurs() throws ClassNotFoundException, IOException {
-		int nbJoueurs = getInt();
-		if (nbJoueurs == - 1)
-			return null;
+	private ArrayList<Joueur> getInfosJoueurs() throws ClassNotFoundException, IOException {
+		Integer nbJoueurs = getInt();
+		while (nbJoueurs == null) {
+			System.out.println("Erreur de saisie, j'attend un ENTIER");
+			nbJoueurs = getInt();
+		}
 		ArrayList<Joueur> toReturn = new ArrayList<Joueur>(nbJoueurs);
 		for (int i = 0; i < nbJoueurs; i ++) {
 			Joueur joueurRecu = getJoueur();
 			if (!toReturn.contains(joueurRecu)) {
 				toReturn.add(joueurRecu);
-				System.out.println("Joueur ajout� : " + joueurRecu.getNom());
+				System.out.println("Joueur ajouté : " + joueurRecu.getNom());
 			}
 		}
 		return toReturn;
 	}
 	
-	public Joueur getJoueur() throws ClassNotFoundException, IOException {
+	public Joueur getJoueur()
+	{
 		try {
 			Object objRecu = this.obj_in.readObject();
 			if (!(objRecu instanceof Joueur))
@@ -88,9 +92,20 @@ public class ThreadEnvoiReception implements Runnable {
 		return null;
 	}
 
+	public void definirTraitementEtExecuter(String traitement) {
+		this.traitement = traitement;
+		this.start();
+	}
+	
+	public ArrayList<Joueur> getListJoueur() {
+		return listJoueur;
+	}
+
+	public String getTraitement() {
+		return traitement;
+	}
+
 	public boolean isSendMode() {
 		return isSendMode;
 	}
-
-
 }
