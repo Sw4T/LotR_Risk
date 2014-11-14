@@ -60,7 +60,7 @@ public class LOTR_Game implements InterfaceLOTR {
 
 	public boolean init_joueurs_territoires() throws ClassNotFoundException, IOException, InterruptedException {
 		System.out.println("Lancement de la procédure pour la création des joueurs");
-		this.tabJoueur = getJoueurs();
+		this.tabJoueur = getJoueurs_FromRemote();
 		if (this.tabJoueur == null)
 			return false;
 		System.out.println("Fin de la réception de " + this.tabJoueur.size() + " joueurs");
@@ -93,7 +93,7 @@ public class LOTR_Game implements InterfaceLOTR {
 		return true;
 	}
 
-	public ArrayList<Joueur> getJoueurs() throws ClassNotFoundException, IOException, InterruptedException {
+	public ArrayList<Joueur> getJoueurs_FromRemote() throws ClassNotFoundException, IOException, InterruptedException {
 		this.threadCon.getThreadDonnees().definirTraitementEtExecuter(PROCEDURE_JOUEURS);
 		this.threadCon.getThreadDonnees().join();
 		ThreadEnvoiReception newThread = this.threadCon.getThreadDonnees().clone();
