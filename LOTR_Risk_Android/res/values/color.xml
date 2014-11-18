@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="VERT">#008000</color>
+    <color name="ROUGE">#FF0000</color>
+    <color name="NOIR">#000000</color>
+    <color name="JAUNE">#EEEE08</color>
+    
+    <integer-array name="couleurs_lotr">
+        <item>@color/JAUNE</item>
+        <item>@color/NOIR</item>
+        <item>@color/ROUGE</item>
+        <item>@color/VERT</item>
+    </integer-array>
+</resources>
