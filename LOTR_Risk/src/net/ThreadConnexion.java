@@ -35,6 +35,10 @@ public class ThreadConnexion extends Thread {
 		return (this.hasFinished.get());
 	}
 	
+	/**
+	 * Ferme le serveur de connexion et met les attributs de la classe en conséquence
+	 * @throws Throwable
+	 */
 	public void close() throws Throwable {
 		this.serveur.close();
 		this.hasFinished.set(true);
