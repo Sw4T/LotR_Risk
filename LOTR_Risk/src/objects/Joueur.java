@@ -1,5 +1,6 @@
 package objects;
 
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -9,14 +10,16 @@ public class Joueur implements Serializable {
 	private String nom;
 	private int nb_unites;
 	private int score;
+	private Color couleur;
 	private ArrayList<Territoire> listTerritoire;
 	
-	public Joueur(String name)
+	public Joueur(String name, String couleurRGB)
 	{
 		this.nom = name;
 		this.nb_unites = 0;
 		this.score = 0;
 		this.listTerritoire = new ArrayList<Territoire>();
+		this.couleur = Color.decode(couleurRGB);
 	}
 	
 	public void add_Territoire(Territoire t) {
@@ -46,12 +49,35 @@ public class Joueur implements Serializable {
 		}
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (o == this)
+			return true;
+		if (!(o instanceof Joueur))
+			return false;
+		Joueur j = (Joueur) o;
+		if (this.nom.equals(j.getNom()))
+			return true;
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer str = new StringBuffer();
+		str.append(this.nom + " possède : \n\t");
+		for (int i = 0; i < this.listTerritoire.size(); i++) {
+			str.append(this.listTerritoire.get(i).getNom() + "\n\t");
+		}
+		return str.toString();
+	}
+	
 	public boolean has_Territoire(Territoire t) {
 		return this.listTerritoire.contains(t);
 	}
 	
-	public int getNb_Territoire()
-	{
+	public int getNb_Territoire() {
 		return this.listTerritoire.size();
 	}
 	
@@ -81,29 +107,9 @@ public class Joueur implements Serializable {
 	
 	public ArrayList<Territoire> getListTerritoire() {
 		return listTerritoire;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		if (o == this)
-			return true;
-		if (!(o instanceof Joueur))
-			return false;
-		Joueur j = (Joueur) o;
-		if (this.nom.equals(j.getNom()))
-			return true;
-		return false;
-	}
-	
-	@Override
-	public String toString() {
-		StringBuffer str = new StringBuffer();
-		str.append(this.nom + " possède : \n\t");
-		for (int i = 0; i < this.listTerritoire.size(); i++) {
-			str.append(this.listTerritoire.get(i).getNom() + "\n\t");
-		}
-		return str.toString();
 	}	
+	
+	public Color getCouleur() {
+		return couleur;
+	}
 }
