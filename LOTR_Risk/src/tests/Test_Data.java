@@ -94,6 +94,23 @@ public class Test_Data {
 	}
 	
 	@Test
+	public void test_liste_regions_joueur() {
+		joueur.add_Territoire(new Territoire("Esgaroth", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Sud", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Rhûn du Nord", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Landes Desséchée", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Mithlond", false, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Pays des Vieux Biscornus", true, TypeTerritoire.BIEN));
+		joueur.add_Territoire(new Territoire("Trouée du Rohan", false, TypeTerritoire.BIEN));
+		joueur.add_Territoire(new Territoire("Fangorn", true, TypeTerritoire.MAL));
+		joueur.add_Territoire(new Territoire("Enedwaith", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Miniriath", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Eregion", false, TypeTerritoire.NEUTRE));
+		joueur.add_Territoire(new Territoire("Pays de Dun", false, TypeTerritoire.NEUTRE));
+		assertEquals(data.getRegionsJoueur(joueur).size(), 2);
+	}
+	
+	@Test
 	public void test_joueur_renforts_simple() {
 		joueur.add_Territoire(new Territoire("Esgaroth", false, TypeTerritoire.NEUTRE));
 		joueur.add_Territoire(new Territoire("Rhûn du Sud", false, TypeTerritoire.NEUTRE));
