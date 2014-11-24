@@ -31,10 +31,10 @@ public class LOTR_Game implements InterfaceLOTR {
 		ArrayList<Territoire> listAllTerritoires = this.data.getAllTerritoires();
 		switch (this.tabJoueur.size()) { //Changement de règles en fonction du nombre de joueur
 			case 2 : 
-				this.tabJoueur.get(0).setListTerritoire(this.data.getListTerritoireFromType(TypeTerritoire.BIEN));
-				this.tabJoueur.get(1).setListTerritoire(this.data.getListTerritoireFromType(TypeTerritoire.MAL));
+				this.tabJoueur.get(0).setListTerritoire(this.data.getListTerritoireAvecType(TypeTerritoire.BIEN));
+				this.tabJoueur.get(1).setListTerritoire(this.data.getListTerritoireAvecType(TypeTerritoire.MAL));
 				this.tabJoueur.add(new Joueur("Neutre", "#FF0000")); //Gestion du neutre TODO
-				this.tabJoueur.get(2).setListTerritoire(this.data.getListTerritoireFromType(TypeTerritoire.NEUTRE));
+				this.tabJoueur.get(2).setListTerritoire(this.data.getListTerritoireAvecType(TypeTerritoire.NEUTRE));
 				break;
 			case 3 : 
 				//Joueur 1
@@ -44,7 +44,7 @@ public class LOTR_Game implements InterfaceLOTR {
 				this.tabJoueur.get(1).add_Territoires_From_List(this.data.generateRandomTerritoiresFromType(TypeTerritoire.MAL, 4, listAllTerritoires));
 				this.tabJoueur.get(1).add_Territoires_From_List(this.data.generateRandomTerritoiresFromType(TypeTerritoire.NEUTRE, 5, listAllTerritoires));
 				//Joueur 3
-				this.tabJoueur.get(2).add_Territoires_From_List(this.data.getListTerritoireFromType(TypeTerritoire.BIEN));
+				this.tabJoueur.get(2).add_Territoires_From_List(this.data.getListTerritoireAvecType(TypeTerritoire.BIEN));
 				break;
 			case 4 :
 				this.tabJoueur.get(0).add_Territoires_From_List(this.data.generateRandomTerritoiresFromType(TypeTerritoire.MAL, 5, listAllTerritoires));
@@ -78,8 +78,10 @@ public class LOTR_Game implements InterfaceLOTR {
 	}
 	/**
 	 * Retourne la <b>constante</b> de type entier reçu depuis l'application distante, <b>-1</b> si la connexion n'existe pas.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
-	Integer recupererTraitement() {
+	Integer recupererTraitement() throws ClassNotFoundException, IOException {
 		if (this.threadCon.getThreadDonnees() != null)
 			return this.threadCon.getThreadDonnees().get_Constante_Jeu();
 		return null;
