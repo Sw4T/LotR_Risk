@@ -31,8 +31,7 @@ public class LOTR_Data {
 	 * Retourne <u>l'objet Region</u> associé au nom défini par <b>nomRegion</b>, retourne <u>null</u> sinon.
 	 * @param str
 	 */
-	public Region getRegionByName(String nomRegion) 
-	{
+	public Region getRegionByName(String nomRegion) {
 		for (Region r : this.mapRegion)
 		{
 			if (r.getNom().equals(nomRegion)) {
@@ -51,7 +50,7 @@ public class LOTR_Data {
 	 */
 	public ArrayList<Territoire> generateRandomTerritoiresFromType(TypeTerritoire type, int nbTerritoire, ArrayList<Territoire> listTerritoire) {
 		ArrayList<Territoire> toReturn = new ArrayList<Territoire>();
-		ArrayList<Territoire> listTerritoireType = getListTerritoireFromType(type);
+		ArrayList<Territoire> listTerritoireType = getListTerritoireAvecType(type);
 		int tailleListe = listTerritoireType.size();
 		Territoire territoireCourant;
 		if (nbTerritoire > listTerritoireType.size()) {
@@ -66,7 +65,8 @@ public class LOTR_Data {
 			while (!trouve) {
 				chiffreRandom = random.nextInt(tailleListe);
 				territoireCourant = listTerritoireType.get(chiffreRandom);
-				if (!toReturn.contains(territoireCourant) && listTerritoire.contains(territoireCourant)) {
+				if (!toReturn.contains(territoireCourant) && listTerritoire.contains(territoireCourant)) //Evite les redondances
+				{
 						toReturn.add(territoireCourant);
 						listTerritoire.remove(territoireCourant);
 						trouve = true;
@@ -77,7 +77,21 @@ public class LOTR_Data {
 	}
 
 	/**
-	 * Retourne <u>true</u> si le joueur <b>j</b> poss�de la r�gion de nom <b>nomRegion</b>.
+	 * Retourne la liste des regions controlées par le joueur <b>j</b>.
+	 * @param j
+	 */
+	public ArrayList<Region> getRegionsJoueur(Joueur j) {
+		ArrayList<Region> toReturn = new ArrayList<Region>();
+		for (Region r : this.mapRegion) {
+			if (playerHasRegion(j, r.getNom())) {
+				toReturn.add(r);
+			}
+		}
+		return toReturn;
+	}
+	
+	/**
+	 * Retourne <b>true</b> si le joueur <b>j</b> poss�de la r�gion de nom <b>nomRegion</b>.
 	 * @param j
 	 * @param nomRegion
 	 */
@@ -113,7 +127,7 @@ public class LOTR_Data {
 	 * Retourne la liste de tout les territoires possedant le type défini par <b>type</b>.
 	 * @param type
 	 */
-	public ArrayList<Territoire> getListTerritoireFromType(TypeTerritoire type) {
+	public ArrayList<Territoire> getListTerritoireAvecType(TypeTerritoire type) {
 		ArrayList<Territoire> toReturn = new ArrayList<Territoire>();
 		for (Region r : this.mapRegion) {
 			for (Territoire t : r.getListTerritoire()) {
@@ -126,7 +140,7 @@ public class LOTR_Data {
 	}
 	
 	/**
-	 * Retourne une ArrayList de tout les territoires.
+	 * Retourne une ArrayList de tout les territoires du jeu.
 	 * @param type
 	 */
 	public ArrayList<Territoire> getAllTerritoires() {
