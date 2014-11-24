@@ -19,9 +19,9 @@ public class TestClient implements InterfaceLOTR {
 	public static void main(String[] args) {
 		try {
 			Socket s = new Socket("localhost", 9876);
-			s.setSoTimeout(4000);
+			s.setSoTimeout(4000); //Temps d'attente de 4s pour les lectures/écritures
 			Scanner input = new Scanner(System.in);
-			ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
+			ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(s.getInputStream());
 			System.out.println("Constantes actuellement implémentées : \r\tPROCEDURE_JOUEUR -> tapez \"joueur\""
 			+ "\n\tFERMER_SERVEUR -> tapez \"close\"");
@@ -29,23 +29,28 @@ public class TestClient implements InterfaceLOTR {
 			String entreeJoueur;
 			do
 			{
-				if (entree != null && entree.equals("joueur")) 
+				if (entree != null) 
 				{
-					envoyerObject(oos, PROCEDURE_JOUEURS);
-					System.out.println("Serveur : " + (String) in.readObject());
-					System.out.println("Veuillez entrez un nombre de joueurs...");
-					Integer nbJoueurs = Integer.parseInt(input.nextLine());
-					envoyerObject(oos, nbJoueurs);
-					for (int i = 0; i < nbJoueurs; i++) {
-						System.out.println("Entrez le nom du joueur n°" + (i + 1));
-						entreeJoueur = input.nextLine();
-						envoyerObject(oos, new Joueur(entreeJoueur));
+					if (entree.equals("joueur")) 
+					{
+						envoyerObject(out, PROCEDURE_JOUEURS); //Envoi de la constante pour l'envoi de joueurs
+						System.out.println("Serveur : " + (String) in.readObject());
+						System.out.println("Veuillez entrez un nombre de joueurs...");
+						
+						Integer nbJoueurs = Integer.parseInt(input.nextLine());
+						envoyerObject(out, nbJoueurs);
+						
+						for (int i = 0; i < nbJoueurs; i++) {
+							System.out.println("Entrez le nom du joueur n°" + (i + 1));
+							entreeJoueur = input.nextLine();
+							envoyerObject(out, new Joueur(entreeJoueur, "#FF0000")); //Envoi de l'objet joueur
+						}
 					}
-				} else if (entree != null && entree.equals("close")) {
-					envoyerObject(oos, FERMER_SERVEUR);
+					else if (entree.equals("close")) 
+						envoyerObject(out, FERMER_SERVEUR);
+					else if (!entree.equals(""))
+						envoyerObject(out, entree);
 				}
-				else if (entree != null && !entree.equals("")) 
-					envoyerObject(oos, entree);
 			} while (!(entree = input.nextLine()).equals("tg"));
 			input.close();
 			s.close();
@@ -55,9 +60,9 @@ public class TestClient implements InterfaceLOTR {
 		} 
 	}
 	
-	public static synchronized void envoyerObject(ObjectOutputStream oos, Object o) throws IOException {
-		oos.writeObject(o);
-		oos.flush();
+	public static synchronized void envoyerObject(ObjectOutputStream out, Object o) throws IOException {
+		out.writeObject(o);
+		out.flush();
 	}
 
 }
