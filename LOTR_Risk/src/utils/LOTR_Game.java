@@ -20,45 +20,9 @@ public class LOTR_Game implements InterfaceLOTR {
 		this.threadCon = new ThreadConnexion();
 		this.threadCon.start();
 	}
-	
-	/** 
-	 * Main du serveur
-	 * @param args
-	 */
-	public static void main(String [] args) {
-		LOTR_Game jeu = null;
-		try {
-			jeu = new LOTR_Game();	
-			Integer constanteTraitement;
-			while (jeu.getThreadConnexion().getThreadDonnees() == null) { //Attente de la connexion client
-				Thread.sleep(1000); 
-			}
-			do {
-				constanteTraitement = jeu.recupererTraitement(); //Récupère l'entier définissant une constante
-				if (constanteTraitement != null) {
-					switch (constanteTraitement.intValue()) {
-						case PROCEDURE_JOUEURS :
-							if (jeu.init_joueurs_territoires()) { //Retourne true si la procédure a bien aboutie
-								for (int i = 0; i < jeu.getTabJoueurs().size(); i++) {
-									System.out.println(jeu.getTabJoueurs().get(i));
-								}
-							} else
-								System.out.println("Erreur lors de l'initialisation des joueurs");
-							break;
-						case FERMER_SERVEUR : 
-							jeu.getThreadConnexion().close(); //Ferme le serveur
-							break;
-						default : System.out.println("Constante non implémentée ou inconnue");
-					}
-				} else
-					System.out.println("Format de données invalide");
-			} while (!jeu.getThreadConnexion().isServeurFinished()); 
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-	}
 
-	public boolean init_joueurs_territoires() throws ClassNotFoundException, IOException, InterruptedException {
+	public boolean init_joueurs_territoires() throws ClassNotFoundException, IOException, InterruptedException 
+	{
 		System.out.println("Lancement de la procédure pour la création des joueurs");
 		this.tabJoueur = getJoueurs_FromRemote();
 		if (this.tabJoueur == null)
@@ -69,7 +33,7 @@ public class LOTR_Game implements InterfaceLOTR {
 			case 2 : 
 				this.tabJoueur.get(0).setListTerritoire(this.data.getListTerritoireFromType(TypeTerritoire.BIEN));
 				this.tabJoueur.get(1).setListTerritoire(this.data.getListTerritoireFromType(TypeTerritoire.MAL));
-				this.tabJoueur.add(new Joueur("Neutre")); //Gestion du neutre TODO
+				this.tabJoueur.add(new Joueur("Neutre", "#FF0000")); //Gestion du neutre TODO
 				this.tabJoueur.get(2).setListTerritoire(this.data.getListTerritoireFromType(TypeTerritoire.NEUTRE));
 				break;
 			case 3 : 
@@ -93,6 +57,12 @@ public class LOTR_Game implements InterfaceLOTR {
 		return true;
 	}
 
+	/**
+	 * Execute la procédure de récupération des joueurs, attend la fin de la procédure et retourne la liste associée.
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public ArrayList<Joueur> getJoueurs_FromRemote() throws ClassNotFoundException, IOException, InterruptedException {
 		this.threadCon.getThreadDonnees().definirTraitementEtExecuter(PROCEDURE_JOUEURS);
 		this.threadCon.getThreadDonnees().join();
@@ -101,16 +71,21 @@ public class LOTR_Game implements InterfaceLOTR {
 		return (this.threadCon.getThreadDonnees().getListJoueur());
 	}	
 	
+	void attenteConnexionClient() throws InterruptedException {
+		while (this.getThreadConnexion().getThreadDonnees() == null) { //Attente de la connexion client
+			Thread.sleep(1000); 
+		}
+	}
 	/**
 	 * Retourne la <b>constante</b> de type entier reçu depuis l'application distante, <b>-1</b> si la connexion n'existe pas.
 	 */
-	public Integer recupererTraitement() {
+	Integer recupererTraitement() {
 		if (this.threadCon.getThreadDonnees() != null)
 			return this.threadCon.getThreadDonnees().get_Constante_Jeu();
-		return (new Integer(-1));
+		return null;
 	}
 	
-	public ThreadConnexion getThreadConnexion() {
+	ThreadConnexion getThreadConnexion() {
 		return threadCon;
 	}
 	
