@@ -14,41 +14,31 @@ public class Reception {
 		this.obj_in = new ObjectInputStream(in);
 	}
 	
-	public Joueur getJoueur()
+	public Joueur getJoueur() throws ClassNotFoundException, IOException
 	{
-		try {
-			Object objRecu = this.obj_in.readObject();
-			if (!(objRecu instanceof Joueur))
-				return null;
-			return ((Joueur) objRecu);
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+		Object objRecu = this.obj_in.readObject();
+		if (!(objRecu instanceof Joueur))
+			return null;
+		return ((Joueur) objRecu);		
 	}
 	
-	public String getString() 
+	public String getString() throws ClassNotFoundException, IOException 
 	{
-		try {
-			Object objRecu = this.obj_in.readObject();
-			if (!(objRecu instanceof String))
-				return null;
-			return ((String) objRecu);
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+		Object objRecu = this.obj_in.readObject();
+		if (!(objRecu instanceof String))
+			return null;
+		return ((String) objRecu);
 	}
 	
-	public Integer getInt() {
-		try {
-			Object objRecu = this.obj_in.readObject();
-			if (!(objRecu instanceof Integer))
-				return null;
-			return ((Integer) objRecu);
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public Integer getInt() throws ClassNotFoundException, IOException 
+	{
+		Object objRecu = this.obj_in.readObject();
+		if (!(objRecu instanceof Integer))
+			return null;
+		return ((Integer) objRecu);
+	}
+	
+	public void close() throws IOException {
+		this.obj_in.close();
 	}
 }

@@ -28,5 +28,9 @@ public class Emission {
 		this.obj_out.writeObject(toSend);
 		this.obj_out.flush();
 	}
+	
+	public void close() throws IOException {
+		this.obj_out.close();
+	}
 
 }
