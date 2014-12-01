@@ -6,7 +6,7 @@
     tools:context="${relativePackage}.${activityClass}" >
 
     <EditText
-        android:id="@+id/ET_addrServeur"
+        android:id="@+id/ET_nomJoueur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -22,8 +22,8 @@
         android:id="@+id/ET_portServeur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/ET_addrServeur"
-        android:layout_alignLeft="@+id/ET_addrServeur"
+        android:layout_alignStart="@+id/ET_nomJoueur"
+        android:layout_alignLeft="@+id/ET_nomJoueur"
         android:layout_centerVertical="true"
         android:background="#000000"
         android:ems="10"
@@ -47,7 +47,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ET_addrServeur"
+        android:layout_alignBottom="@+id/ET_nomJoueur"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="32dp"
         android:text="@string/adresse_du_serveur"
