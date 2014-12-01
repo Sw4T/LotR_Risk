@@ -66,7 +66,7 @@ public class Joueur implements Serializable {
 	@Override
 	public String toString() {
 		StringBuffer str = new StringBuffer();
-		str.append(this.nom + " possède : \n\t");
+		str.append(this.nom + "(" + this.couleur.toString() + ")" + "possède : \n\t");
 		for (int i = 0; i < this.listTerritoire.size(); i++) {
 			str.append(this.listTerritoire.get(i).getNom() + "\n\t");
 		}
