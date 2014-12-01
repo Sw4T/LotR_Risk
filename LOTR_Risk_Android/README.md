@@ -9,7 +9,7 @@
     - Javadoc
 * * *
 ##Doing
-    - StartUpActivity (***FIXING***)
+    - StartUpActivity (*FIXING*)
     - Layout files for dialog boxes
     - Asynchronous tasks to send/receive object data
     - Base layout for MainActivty
