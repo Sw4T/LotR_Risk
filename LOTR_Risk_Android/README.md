@@ -2,7 +2,7 @@
 * * *
 ##ToDo
     - Activities (StartUpActivity, MainActivity)
-    - Layout files for MainActivity
+    - Behavior of MainActivity
     - Implement game progression
     - Layout for MainActivity
     - Exceptions 
