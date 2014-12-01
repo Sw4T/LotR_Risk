@@ -20,18 +20,11 @@ public class TacheConnexion extends AsyncTask<String, Void, DonneesConnexion> {
 		return (connexion);	
 	}
 	
+	@Override
 	protected void onPostExecute(DonneesConnexion result) {	
 		if (result.get_Connexion_Reussi())
 			Toast.makeText(this.context, "Connexion OK", Toast.LENGTH_SHORT).show();
 		else
 			Toast.makeText(this.context, "Connexion FAILED", Toast.LENGTH_SHORT).show();
     }
-
-	
-	
-	
-	
-	
-
-
 }
