@@ -2,7 +2,7 @@ package com.game;
 
 import java.util.ArrayList;
 
-import com.objects.Joueur;
+import objects.Joueur;
 
 public class LOTR_Game {
 

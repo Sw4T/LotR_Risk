@@ -6,6 +6,6 @@ package com.game;
  */
 public interface InterfaceLOTR {
 
-	public final static int PROCEDURE_JOUEURS = 1;
+	public final static int ENVOI_JOUEURS = 1;
 	public final static int FERMER_SERVEUR = 0;
 }
