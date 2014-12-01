@@ -1,33 +1,33 @@
 package com.net;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class DonneesConnexion {
 
-	private ObjectInputStream obj_in;
-	private Emission bufferSortie; //TODO
+	private Reception in;
+	private Emission out; 
 	private Socket socket;
-	private boolean isSendMode;
+	private boolean connectionReussi;
 	
 	
 	public DonneesConnexion(String servAddr, int port) {
 		Boolean reussi = this.connexionServeur(servAddr, port);
 		if (reussi)
-			this.isSendMode = true;
+			this.connectionReussi = true;
 		else
-			this.isSendMode = false;
+			this.connectionReussi = false;
 	}
 
 	private Boolean connexionServeur(String servAddr, int port)
 	{
 		try {
 			this.socket = new Socket();
-			this.socket.connect(new InetSocketAddress(servAddr, port), 5000);
-			this.bufferSortie = new Emission(this.socket.getOutputStream(), this);
-			this.obj_in = new ObjectInputStream(this.socket.getInputStream());
+			this.socket.setSoTimeout(5000);
+			this.socket.connect(new InetSocketAddress(servAddr, port));
+			this.out = new Emission(this.socket.getOutputStream(), this);
+			this.in = new Reception(this.socket.getInputStream());
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -36,7 +36,24 @@ public class DonneesConnexion {
 	}
 	
 	public boolean get_Connexion_Reussi() {
-		return this.isSendMode;
+		return this.connectionReussi;
+	}
+
+	public Emission getOutput() {
+		return out;
+	}
+	
+	public Reception getInput() {
+		return this.in;
+	}
+	
+	public void close() throws IOException {
+		out.close();
+		in.close();
+	}
+	
+	public String getString() throws IOException, ClassNotFoundException {
+		return this.in.getString();
 	}
 	
 }
