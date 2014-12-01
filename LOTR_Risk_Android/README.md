@@ -2,18 +2,20 @@
 * * *
 ##ToDo
     - Activities (StartUpActivity, MainActivity)
-    - Fix conception
     - Layout files for MainActivity
-    - Layout files for dialog boxes
     - Implement game progression
-    - Network class to rework
-    - AsyncTask for asynchronous requests with the server
+    - Layout for MainActivity
+    - Exceptions 
     - Javadoc
 * * *
 ##Doing
-    - StartUpActivity
-    - Base layout files
+    - StartUpActivity (**FIXING**)
+    - Layout files for dialog boxes
+    - Asynchronous tasks to send/receive object data
+    - Base layout for MainActivty
     - Rework objects classes
-    - Requests to the server
 * * *
-    
+##Done
+    - Base layout for StartUpActivity (init game rules/inputs)
+    - Dialog boxes for player input
+    - Send Players to server
