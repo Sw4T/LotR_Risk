@@ -1,4 +1,4 @@
-LotR_Risk
+LotR_Risk BETA
 =========
 
 LOTR Risk board game support for Java &amp; [Android](https://github.com/Sw4T/LotR_Risk/tree/master/LOTR_Risk_Android) in development
@@ -6,9 +6,7 @@ LOTR Risk board game support for Java &amp; [Android](https://github.com/Sw4T/Lo
 ToDo
 ----
     - GUI
-    - Implement game rules
-    - Base Android classes and objects
-    - Send messages to Android app
+    - Implement game rules (~30% done)
     - Log of events
     - Image Writing and analysis
     - Exceptions/errors
@@ -18,17 +16,23 @@ Doing
 -----
 **Sw4T**
 
-    - Methods to fetch data
+    - Implement game rules
     - Finishing conception
-    - Threads for networking
-    - Unit Test
+    - Refactoring
     - Javadoc
+    - Android application
 
 **Seikomi**
 
     - GUI
     - Controllers
     - Image scale and analysis
+
+Done
+-----
+    - Unit tests on objects
+    - Server base behavior
+    - Thread for networking
 
 * * *
 Un tutoriel sur les fichiers **.md** (markdown language) peut être trouvé *_[ici](http://www.daringfireball.net/projects/markdown/basics)_*.
