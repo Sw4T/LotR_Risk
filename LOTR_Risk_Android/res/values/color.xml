@@ -5,10 +5,10 @@
     <color name="NOIR">#000000</color>
     <color name="JAUNE">#EEEE08</color>
     
-    <integer-array name="couleurs_lotr">
+    <string-array name="colors">        
         <item>@color/JAUNE</item>
+        <item>@color/VERT</item>  
         <item>@color/NOIR</item>
         <item>@color/ROUGE</item>
-        <item>@color/VERT</item>
-    </integer-array>
+    </string-array>
 </resources>
