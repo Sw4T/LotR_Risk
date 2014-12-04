@@ -43,7 +43,7 @@ public class TestClient implements InterfaceLOTR {
 						for (int i = 0; i < nbJoueurs; i++) {
 							System.out.println("Entrez le nom du joueur n°" + (i + 1));
 							entreeJoueur = input.nextLine();
-							envoyerObject(out, new Joueur(entreeJoueur, "#FF0000")); //Envoi de l'objet joueur
+							envoyerObject(out, new Joueur(entreeJoueur, "000000")); //Envoi de l'objet joueur
 						}
 					}
 					else if (entree.equals("close")) 

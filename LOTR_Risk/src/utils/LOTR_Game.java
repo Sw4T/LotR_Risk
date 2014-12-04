@@ -33,7 +33,7 @@ public class LOTR_Game implements InterfaceLOTR {
 			case 2 : 
 				this.tabJoueur.get(0).setListTerritoire(this.data.getListTerritoireAvecType(TypeTerritoire.BIEN));
 				this.tabJoueur.get(1).setListTerritoire(this.data.getListTerritoireAvecType(TypeTerritoire.MAL));
-				this.tabJoueur.add(new Joueur("Neutre", "#FF0000")); //Gestion du neutre TODO
+				this.tabJoueur.add(new Joueur("Neutre", "000000")); //Gestion du neutre TODO
 				this.tabJoueur.get(2).setListTerritoire(this.data.getListTerritoireAvecType(TypeTerritoire.NEUTRE));
 				break;
 			case 3 : 

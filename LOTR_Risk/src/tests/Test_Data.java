@@ -26,7 +26,7 @@ public class Test_Data {
 	public void setUp() throws Exception {
 		region = new Region("Rhûn", 5);
 		territoire = new Territoire("testTerritoire", false, TypeTerritoire.BIEN);
-		joueur = new Joueur("Arthure", "#FF00000");
+		joueur = new Joueur("Arthure", "000000");
 		data = new LOTR_Data();
 	}
 

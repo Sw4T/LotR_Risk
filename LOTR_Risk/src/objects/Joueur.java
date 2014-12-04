@@ -10,16 +10,17 @@ public class Joueur implements Serializable {
 	private String nom;
 	private int nb_unites;
 	private int score;
-	private Color couleur;
+	private int couleur;
+	private Color couleurClass;
 	private ArrayList<Territoire> listTerritoire;
 	
-	public Joueur(String name, String couleurRGB)
+	public Joueur(String name, String colorRGB)
 	{
 		this.nom = name;
 		this.nb_unites = 0;
 		this.score = 0;
 		this.listTerritoire = new ArrayList<Territoire>();
-		this.couleur = Color.decode(couleurRGB);
+		this.couleurClass = Color.decode(colorRGB);
 	}
 	
 	public void add_Territoire(Territoire t) {
@@ -66,11 +67,16 @@ public class Joueur implements Serializable {
 	@Override
 	public String toString() {
 		StringBuffer str = new StringBuffer();
-		str.append(this.nom + "(" + this.couleur.toString() + ")" + "possède : \n\t");
+		str.append(this.nom + " (" + this.couleurClass.toString() + ") " + "possède : \n\t");
 		for (int i = 0; i < this.listTerritoire.size(); i++) {
 			str.append(this.listTerritoire.get(i).getNom() + "\n\t");
 		}
 		return str.toString();
+	}
+	
+	public void fixCouleur() {
+		String hexColor = String.format("#%06X", (0xFFFFFF & this.couleur));
+		this.couleurClass = Color.decode(hexColor);
 	}
 	
 	public boolean has_Territoire(Territoire t) {
@@ -109,7 +115,7 @@ public class Joueur implements Serializable {
 		return listTerritoire;
 	}	
 	
-	public Color getCouleur() {
+	public int getCouleur() {
 		return couleur;
 	}
 }

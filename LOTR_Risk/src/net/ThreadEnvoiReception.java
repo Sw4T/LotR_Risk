@@ -67,6 +67,7 @@ public class ThreadEnvoiReception extends Thread implements InterfaceLOTR {
 		ArrayList<Joueur> toReturn = new ArrayList<Joueur>(nbJoueurs);
 		for (int i = 0; i < nbJoueurs; i ++) {
 			Joueur joueurRecu = in.getJoueur();
+			joueurRecu.fixCouleur(); //Création de l'attribut de type Color
 			if (!toReturn.contains(joueurRecu)) {
 				toReturn.add(joueurRecu);
 				System.out.println("Joueur ajouté : " + joueurRecu.getNom());
