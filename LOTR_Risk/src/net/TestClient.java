@@ -24,34 +24,47 @@ public class TestClient implements InterfaceLOTR {
 			ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(s.getInputStream());
 			System.out.println("Constantes actuellement implémentées : \r\tPROCEDURE_JOUEUR -> tapez \"joueur\""
-			+ "\n\tFERMER_SERVEUR -> tapez \"close\"");
+							+ "\n\tRECEPTION_JOUEUR -> tapez \"reception\" (après avoir envoyé les joueurs)"
+							+ "\n\tFERMER_SERVEUR -> tapez \"close\"");
 			String entree = input.nextLine();
-			String entreeJoueur;
+			String nomJoueur;
+			Integer nombreJoueurs = null;
 			do
 			{
 				if (entree != null) 
 				{
 					if (entree.equals("joueur")) 
 					{
-						envoyerObject(out, PROCEDURE_JOUEURS); //Envoi de la constante pour l'envoi de joueurs
+						envoyerObject(out, CREATION_JOUEURS); //Envoi de la constante pour l'envoi de joueurs
 						System.out.println("Serveur : " + (String) in.readObject());
 						System.out.println("Veuillez entrez un nombre de joueurs...");
 						
-						Integer nbJoueurs = Integer.parseInt(input.nextLine());
-						envoyerObject(out, nbJoueurs);
+						nombreJoueurs = Integer.parseInt(input.nextLine());
+						envoyerObject(out, nombreJoueurs);
 						
-						for (int i = 0; i < nbJoueurs; i++) {
+						for (int i = 0; i < nombreJoueurs; i++) {
 							System.out.println("Entrez le nom du joueur n°" + (i + 1));
-							entreeJoueur = input.nextLine();
-							envoyerObject(out, new Joueur(entreeJoueur, "000000")); //Envoi de l'objet joueur
+							nomJoueur = input.nextLine();
+							envoyerObject(out, new Joueur(nomJoueur, "000000")); //Envoi de l'objet joueur
 						}
+					}
+					else if (entree.equals("reception") && nombreJoueurs != null) 
+					{
+						envoyerObject(out, ENVOI_JOUEURS); //Envoi de la constante pour la réception
+						System.out.println("Serveur : " + (String) in.readObject());
+						
+						for (int i = 0; i < nombreJoueurs; i++) {
+							Joueur joueurRecu = (Joueur) in.readObject();
+							System.out.println(joueurRecu);
+						}
+						System.out.println("Fin de la réception des joueurs");
 					}
 					else if (entree.equals("close")) 
 						envoyerObject(out, FERMER_SERVEUR);
 					else if (!entree.equals(""))
 						envoyerObject(out, entree);
 				}
-			} while (!(entree = input.nextLine()).equals("tg"));
+			} while (!(entree = input.nextLine()).equals("tg")); //"tg" ferme le client et la connexion liée
 			input.close();
 			s.close();
 		} catch (UnknownHostException e) { e.printStackTrace();
