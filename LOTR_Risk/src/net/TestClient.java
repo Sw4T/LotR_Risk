@@ -50,7 +50,7 @@ public class TestClient implements InterfaceLOTR {
 					}
 					else if (entree.equals("reception") && nombreJoueurs != null) 
 					{
-						envoyerObject(out, ENVOI_JOUEURS); //Envoi de la constante pour la réception
+						envoyerObject(out, SERVEUR_ENVOI_JOUEURS); //Envoi de la constante pour la réception
 						System.out.println("Serveur : " + (String) in.readObject());
 						
 						for (int i = 0; i < nombreJoueurs; i++) {
