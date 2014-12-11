@@ -69,4 +69,9 @@ public class Territoire implements Serializable {
 			return true;
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return this.nom;
+	}
 }

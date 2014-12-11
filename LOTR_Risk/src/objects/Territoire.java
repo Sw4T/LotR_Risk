@@ -52,7 +52,7 @@ public class Territoire implements Serializable {
 		return has_Stronghold;
 	}
 
-	public TypeTerritoire getType_T() {
+	public TypeTerritoire getType_Territoire() {
 		return type_T;
 	}
 	
@@ -68,5 +68,10 @@ public class Territoire implements Serializable {
 		if (this.nom.equals(t.getNom()))
 			return true;
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return this.nom;
 	}
 }
