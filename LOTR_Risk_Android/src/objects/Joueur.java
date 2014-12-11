@@ -3,15 +3,13 @@ package objects;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import android.graphics.Color;
-
 public class Joueur implements Serializable {
 
 	private static final long serialVersionUID = 3138516806578033883L;
 	private String nom;
 	private int nb_unites;
 	private int score;
-	private Color couleur;
+	private String couleur;
 	private ArrayList<Territoire> listTerritoire;
 	
 	public Joueur(String name, String couleurRGB)
@@ -20,7 +18,7 @@ public class Joueur implements Serializable {
 		this.nb_unites = 0;
 		this.score = 0;
 		this.listTerritoire = new ArrayList<Territoire>();
-		
+		this.couleur = couleurRGB;
 	}
 	
 	public void add_Territoire(Territoire t) {
@@ -50,6 +48,10 @@ public class Joueur implements Serializable {
 		}
 	}
 
+	public Territoire getTerritoire_FromIndex(int index) {
+		return this.listTerritoire.get(index);
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (o == null)
@@ -62,16 +64,6 @@ public class Joueur implements Serializable {
 		if (this.nom.equals(j.getNom()))
 			return true;
 		return false;
-	}
-	
-	@Override
-	public String toString() {
-		StringBuffer str = new StringBuffer();
-		str.append(this.nom + " possède : \n\t");
-		for (int i = 0; i < this.listTerritoire.size(); i++) {
-			str.append(this.listTerritoire.get(i).getNom() + "\n\t");
-		}
-		return str.toString();
 	}
 	
 	public boolean has_Territoire(Territoire t) {
@@ -110,7 +102,7 @@ public class Joueur implements Serializable {
 		return listTerritoire;
 	}	
 	
-	public Color getCouleur() {
+	public String getCouleurRGB() {
 		return couleur;
 	}	
 }
