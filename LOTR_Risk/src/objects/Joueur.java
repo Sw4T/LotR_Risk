@@ -1,6 +1,5 @@
 package objects;
 
-import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -10,8 +9,7 @@ public class Joueur implements Serializable {
 	private String nom;
 	private int nb_unites;
 	private int score;
-	private int couleur;
-	private Color couleurClass;
+	private String couleur;
 	private ArrayList<Territoire> listTerritoire;
 	
 	public Joueur(String name, String colorRGB)
@@ -19,8 +17,8 @@ public class Joueur implements Serializable {
 		this.nom = name;
 		this.nb_unites = 0;
 		this.score = 0;
+		this.couleur = colorRGB;
 		this.listTerritoire = new ArrayList<Territoire>();
-		this.couleurClass = Color.decode(colorRGB);
 	}
 	
 	public void add_Territoire(Territoire t) {
@@ -50,6 +48,10 @@ public class Joueur implements Serializable {
 		}
 	}
 
+	public Territoire getTerritoire_FromIndex(int index) {
+		return this.listTerritoire.get(index);
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (o == null)
@@ -67,16 +69,16 @@ public class Joueur implements Serializable {
 	@Override
 	public String toString() {
 		StringBuffer str = new StringBuffer();
-		str.append(this.nom + " (" + this.couleurClass.toString() + ") " + "possède : \n\t");
+		str.append(this.nom + " (" + this.fixColorJava() + ") " + "possède : \n\t");
 		for (int i = 0; i < this.listTerritoire.size(); i++) {
 			str.append(this.listTerritoire.get(i).getNom() + "\n\t");
 		}
 		return str.toString();
 	}
 	
-	public void fixCouleur() {
-		String hexColor = String.format("#%06X", (0xFFFFFF & this.couleur));
-		this.couleurClass = Color.decode(hexColor);
+	//Retourne le format RGB nécessaire à l'utilisation de la classe Color Java
+	public String fixColorJava() {
+		return (this.couleur.substring(3));
 	}
 	
 	public boolean has_Territoire(Territoire t) {
@@ -115,7 +117,7 @@ public class Joueur implements Serializable {
 		return listTerritoire;
 	}	
 	
-	public int getCouleur() {
+	public String getCouleurRGB() {
 		return couleur;
 	}
 }
