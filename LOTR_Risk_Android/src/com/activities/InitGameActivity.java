@@ -1,8 +1,8 @@
 package com.activities;
 
 import java.util.ArrayList;
-
 import objects.Joueur;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.lotr_risk.R;
 
 
@@ -34,9 +33,10 @@ public class InitGameActivity extends Activity {
 		afficherJoueur();
 	}
 	
+	@SuppressLint("InflateParams")
 	public void afficherJoueur() {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService (Context.LAYOUT_INFLATER_SERVICE);
-		View vuePrincipal = inflater.inflate(R.layout.activity_init_game, null);
+		View vuePrincipal = inflater.inflate(R.layout.activity_init_game, null); //FIX
 		layoutPrincipal = (LinearLayout) vuePrincipal.findViewById(R.id.layout_init_game);
 		for (int i  = 0; i < listJoueurs.size(); i++) 
 		{
