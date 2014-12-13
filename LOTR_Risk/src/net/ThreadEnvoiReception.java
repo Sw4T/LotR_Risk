@@ -12,8 +12,7 @@ public class ThreadEnvoiReception extends Thread implements InterfaceLOTR {
 	private Reception in;
 	private Emission out;
 	private ArrayList<Joueur> listJoueur;
-	//private boolean isSendMode;
-	private int traitement; //Sert à définir le traitement voulu (via constant InterfaceLOTR)
+	private int traitement; //Sert à définir le traitement voulu (via constantes InterfaceLOTR)
 	
 	public ThreadEnvoiReception(Socket soc) throws IOException {
 		super();
@@ -21,10 +20,30 @@ public class ThreadEnvoiReception extends Thread implements InterfaceLOTR {
 		this.in = new Reception(soc.getInputStream());
 	}
 	
-	public ThreadEnvoiReception(Emission out, Reception in) throws IOException {
+	public ThreadEnvoiReception(Emission out, Reception in, ArrayList<Joueur> listJoueurs) throws IOException {
 		super();
 		this.out = out;
 		this.in = in;
+		this.listJoueur = listJoueurs;
+	}
+	
+	@Override
+	public void run() 
+	{
+		if (traitement == CREATION_JOUEURS) {
+			try {
+				this.listJoueur = getInfosJoueurs();
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+				this.listJoueur = null;
+			}
+		}
+		else if (traitement == SERVEUR_ENVOI_JOUEURS) {
+			if (sendInfosJoueurs())
+				System.out.println("Envoi terminé avec succès");
+			else
+				System.out.println("ERREUR lors de l'envoi des joueurs !");
+		}
 	}
 	
 	/**
@@ -36,21 +55,6 @@ public class ThreadEnvoiReception extends Thread implements InterfaceLOTR {
 		this.traitement = traitement;
 		this.start();
 	}
-
-	@Override
-	public void run() 
-	{
-		if (traitement == PROCEDURE_JOUEURS)
-			try {
-				out.sendString("#OK"); //Averti le client que sa demande est bien reçue 
-				this.listJoueur = getInfosJoueurs();
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-				this.listJoueur = null;
-			}
-		else
-			this.listJoueur = null;
-	}
 	
 	/**
 	 * Reçoit la liste des joueurs envoyée par l'application distante.
@@ -59,6 +63,7 @@ public class ThreadEnvoiReception extends Thread implements InterfaceLOTR {
 	 */
 	private ArrayList<Joueur> getInfosJoueurs() throws ClassNotFoundException, IOException 
 	{
+		out.sendString("#OK"); //Averti le client que sa demande est bien reçue 
 		Integer nbJoueurs = in.getInt();
 		while (nbJoueurs == null) {
 			System.out.println("Erreur de saisie, j'attend un ENTIER");
@@ -67,7 +72,6 @@ public class ThreadEnvoiReception extends Thread implements InterfaceLOTR {
 		ArrayList<Joueur> toReturn = new ArrayList<Joueur>(nbJoueurs);
 		for (int i = 0; i < nbJoueurs; i ++) {
 			Joueur joueurRecu = in.getJoueur();
-			joueurRecu.fixCouleur(); //Création de l'attribut de type Color
 			if (!toReturn.contains(joueurRecu)) {
 				toReturn.add(joueurRecu);
 				System.out.println("Joueur ajouté : " + joueurRecu.getNom());
@@ -76,15 +80,29 @@ public class ThreadEnvoiReception extends Thread implements InterfaceLOTR {
 		return toReturn;
 	}
 	
+	private boolean sendInfosJoueurs() 
+	{
+		try {
+			if (listJoueur == null || listJoueur.size() == 0) {
+				out.sendString("#ERROR");
+				return false;
+			}
+			out.sendString("#OK");
+			for (Joueur j : listJoueur) 
+				out.sendJoueur(j);
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * Surcharge de la méthode pour pouvoir réexécuter la méthode run() du Thread.
 	 */
 	public ThreadEnvoiReception clone() 
 	{
 		try {
-			ThreadEnvoiReception toReturn = new ThreadEnvoiReception(this.out, this.in);
-			toReturn.setListJoueur(this.listJoueur);
-			return toReturn;
+			return new ThreadEnvoiReception(this.out, this.in, this.listJoueur);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
