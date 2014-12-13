@@ -52,7 +52,7 @@ public class Main implements InterfaceLOTR {
 				}
 			} while (!jeu.getThreadConnexion().isServeurFinished()); 
 		} 
-		catch (Throwable e) {depuis le client
+		catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}
