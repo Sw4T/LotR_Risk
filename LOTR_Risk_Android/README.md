@@ -1,7 +1,7 @@
 ### Android project for LOTR_Risk Java project
 * * *
 ##ToDo
-    - Activities (StartUpActivity, MainActivity)
+    - Activities (InitGameActivity, MainActivity)
     - Behavior of MainActivity
     - Implement game progression
     - Layout for MainActivity
