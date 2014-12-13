@@ -33,7 +33,7 @@ public class LOTR_Game implements InterfaceLOTR {
 			case 2 : 
 				this.tabJoueur.get(0).setListTerritoire(this.data.getListTerritoireAvecType(TypeTerritoire.BIEN));
 				this.tabJoueur.get(1).setListTerritoire(this.data.getListTerritoireAvecType(TypeTerritoire.MAL));
-				this.tabJoueur.add(new Joueur("Neutre", "000000")); //Gestion du neutre TODO
+				this.tabJoueur.add(new Joueur("Neutre", "#ff000000")); //Gestion du neutre TODO
 				this.tabJoueur.get(2).setListTerritoire(this.data.getListTerritoireAvecType(TypeTerritoire.NEUTRE));
 				break;
 			case 3 : 
@@ -64,18 +64,24 @@ public class LOTR_Game implements InterfaceLOTR {
 	 * @throws InterruptedException
 	 */
 	public ArrayList<Joueur> getJoueurs_FromRemote() throws ClassNotFoundException, IOException, InterruptedException {
-		this.threadCon.getThreadDonnees().definirTraitementEtExecuter(PROCEDURE_JOUEURS);
+		this.threadCon.getThreadDonnees().definirTraitementEtExecuter(CREATION_JOUEURS);
 		this.threadCon.getThreadDonnees().join();
 		ThreadEnvoiReception newThread = this.threadCon.getThreadDonnees().clone();
 		this.threadCon.setThreadDonnees(newThread); //Copie l'ancienne classe pour pouvoir reéxécuter la méthode run()
 		return (this.threadCon.getThreadDonnees().getListJoueur());
 	}	
 	
-	void attenteConnexionClient() throws InterruptedException {
-		while (this.getThreadConnexion().getThreadDonnees() == null) { //Attente de la connexion client
-			Thread.sleep(1000); 
-		}
-	}
+	/**
+	 * Envoi la liste des joueurs à l'application distante.
+	 * @throws InterruptedException
+	 */
+	public void sendJoueurs_ToRemote() throws InterruptedException {
+		this.threadCon.getThreadDonnees().definirTraitementEtExecuter(SERVEUR_ENVOI_JOUEURS);
+		this.threadCon.getThreadDonnees().join();
+		ThreadEnvoiReception newThread = this.threadCon.getThreadDonnees().clone();
+		this.threadCon.setThreadDonnees(newThread); //Copie l'ancienne classe pour pouvoir reéxécuter la méthode run()
+	}	
+	
 	/**
 	 * Retourne la <b>constante</b> de type entier reçu depuis l'application distante, <b>-1</b> si la connexion n'existe pas.
 	 * @throws IOException 
@@ -87,11 +93,22 @@ public class LOTR_Game implements InterfaceLOTR {
 		return null;
 	}
 	
+	void attenteConnexionClient() throws InterruptedException {
+		while (this.getThreadConnexion().getThreadDonnees() == null) { //Attente de la connexion client
+			Thread.sleep(1000); 
+		}
+	}
+	
 	ThreadConnexion getThreadConnexion() {
 		return threadCon;
 	}
 	
-	public ArrayList<Joueur> getTabJoueurs() {
+	//TODO Fermeture de la seule connexion cliente, multiclient non géré
+	void fermerThreadClient() throws Throwable {
+		threadCon.getThreadDonnees().close();
+	}
+	
+	public ArrayList<Joueur> getJoueurs() {
 		return tabJoueur;
 	}
 }
