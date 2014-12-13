@@ -4,23 +4,32 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import net.ThreadConnexion;
-import net.ThreadEnvoiReception;
+import net.EnvoiReception;
+import objects.Client;
 import objects.Joueur;
 import objects.Territoire;
 import objects.TypeTerritoire;
 
 public class LOTR_Game implements InterfaceLOTR {
 
-	private ArrayList<Joueur> tabJoueur;
-	private LOTR_Data data;
-	private ThreadConnexion threadCon; //Thread gérant les connexion entrantes
+	private ArrayList<Joueur> tabJoueur; //Liste des joueurs jouant à la partie
+	private LOTR_Data data; //Données utilisées pour gérer les règles du jeu
+	private ThreadConnexion threadServeur; //Thread gérant les connexion entrantes
+	private Client client; //Application monoclient actuellement
 	
 	public LOTR_Game() throws IOException {
 		this.data = new LOTR_Data(); //Données du plateau initiales
-		this.threadCon = new ThreadConnexion();
-		this.threadCon.start();
+		this.threadServeur = new ThreadConnexion(this);
+		this.threadServeur.start();
 	}
 
+	/**
+	 * Lance la procédure de création des joueurs avec un client <b>(monoclient actuellement)</b> et retourne <b>TRUE</b>
+	 * si l'exécution de celle-ci c'est déroulée correctement. 
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public boolean init_joueurs_territoires() throws ClassNotFoundException, IOException, InterruptedException 
 	{
 		System.out.println("Lancement de la procédure pour la création des joueurs");
@@ -64,11 +73,10 @@ public class LOTR_Game implements InterfaceLOTR {
 	 * @throws InterruptedException
 	 */
 	public ArrayList<Joueur> getJoueurs_FromRemote() throws ClassNotFoundException, IOException, InterruptedException {
-		this.threadCon.getThreadDonnees().definirTraitementEtExecuter(CREATION_JOUEURS);
-		this.threadCon.getThreadDonnees().join();
-		ThreadEnvoiReception newThread = this.threadCon.getThreadDonnees().clone();
-		this.threadCon.setThreadDonnees(newThread); //Copie l'ancienne classe pour pouvoir reéxécuter la méthode run()
-		return (this.threadCon.getThreadDonnees().getListJoueur());
+		EnvoiReception threadTraitement = this.client.definirTraitementEtExecuter(CREATION_JOUEURS, tabJoueur);
+		threadTraitement.join(); //Attend la fin du traitement éxécuté
+		this.tabJoueur = threadTraitement.getListJoueur(); //Récupère la liste des joueurs mise à jour
+		return this.tabJoueur;
 	}	
 	
 	/**
@@ -76,39 +84,52 @@ public class LOTR_Game implements InterfaceLOTR {
 	 * @throws InterruptedException
 	 */
 	public void sendJoueurs_ToRemote() throws InterruptedException {
-		this.threadCon.getThreadDonnees().definirTraitementEtExecuter(SERVEUR_ENVOI_JOUEURS);
-		this.threadCon.getThreadDonnees().join();
-		ThreadEnvoiReception newThread = this.threadCon.getThreadDonnees().clone();
-		this.threadCon.setThreadDonnees(newThread); //Copie l'ancienne classe pour pouvoir reéxécuter la méthode run()
+		Thread threadTraitement = this.client.definirTraitementEtExecuter(SERVEUR_ENVOI_JOUEURS, tabJoueur);
+		threadTraitement.join();
 	}	
 	
 	/**
-	 * Retourne la <b>constante</b> de type entier reçu depuis l'application distante, <b>-1</b> si la connexion n'existe pas.
+	 * Retourne la liste des joueurs jouant à la partie.
+	 */
+	public ArrayList<Joueur> getJoueurs() {
+		return this.tabJoueur;
+	}
+	
+	/**
+	 * Ajoute un nouveau client à la partie.
+	 */
+	public void ajouterNouveauClient(Client toAdd) {
+		this.client = toAdd;
+	}
+	
+	/**
+	 * Retourne la <b>constante</b> de type entier reçu depuis l'application distante du client <b>c</b>, <b>-1</b> si la connexion n'existe pas.
 	 * @throws IOException 
 	 * @throws ClassNotFoundException 
 	 */
-	Integer recupererTraitement() throws ClassNotFoundException, IOException {
-		if (this.threadCon.getThreadDonnees() != null)
-			return this.threadCon.getThreadDonnees().get_Constante_Jeu();
-		return null;
+	Integer recupererTraitementClient(Client c) throws ClassNotFoundException, IOException {
+		return (c.get_ConstanteJeu_FromClient());
 	}
 	
+	ThreadConnexion getThreadConnexion() {
+		return threadServeur;
+	}
+	
+	//Attend une connexion client
 	void attenteConnexionClient() throws InterruptedException {
-		while (this.getThreadConnexion().getThreadDonnees() == null) { //Attente de la connexion client
+		while (this.client == null) { //Attente de la connexion client
 			Thread.sleep(1000); 
 		}
 	}
 	
-	ThreadConnexion getThreadConnexion() {
-		return threadCon;
-	}
-	
 	//TODO Fermeture de la seule connexion cliente, multiclient non géré
-	void fermerThreadClient() throws Throwable {
-		threadCon.getThreadDonnees().close();
+	void fermerClient() throws Throwable {
+		this.client.fermerConnexion();
+		this.tabJoueur = null;
+		this.client = null;
 	}
 	
-	public ArrayList<Joueur> getJoueurs() {
-		return tabJoueur;
+	Client getClient() {
+		return this.client;
 	}
 }
