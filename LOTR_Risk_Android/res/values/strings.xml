@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_start_up">LOTR_Risk_v0.1</string>
     <string name="app_name">LOTR_Risk</string>
     <string name="port_de_connexion">Port de connexion</string>
     <string name="connexion">Connexion</string>
     <string name="adresse_du_serveur">Adresse du serveur</string>
+    <string name="title_activity_init_game">InitGameActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
