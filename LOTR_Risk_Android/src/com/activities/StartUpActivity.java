@@ -7,7 +7,9 @@ import objects.Joueur;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +34,11 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 	Button BT_Connexion, BT_Nb_Joueurs, BT_Envoi_Joueurs;
 	EditText ET_addrServ, ET_numPort;
 	Context context;
+	ProgressDialog progressDialog;
 	HelperCouleur helperCouleur;
 	View [] tabLigneJoueur;
+	ArrayList<Joueur> listJoueurs;
 	private DonneesConnexion connexion;
-	//private LOTR_Game donneesJeu;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +58,13 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 		//String addresse = ET_addrServ.getText().toString();
 		//String numPort = ET_numPort.getText().toString();
 		/* TEST AVEC DES VALEURS ARBITRAIRES -> LES MIENNES !::!!:D */
-		TacheConnexion t = (TacheConnexion) new TacheConnexion(getBaseContext()).execute("192.168.0.30", "9876");
+		TacheConnexion t = (TacheConnexion) new TacheConnexion(getBaseContext()).execute("192.168.0.30", "9875");
 		try {
 			this.connexion = t.get();
 			if (this.connexion.get_Connexion_Reussi()) 
 			{
 				dialog.setTitle("Paramètres de jeu");
-				dialog.setContentView(R.layout.dialog_nombre_joueurs);
+				dialog.setContentView(R.layout.layout_nombre_joueurs);
 				BT_Nb_Joueurs = (Button) dialog.findViewById(R.id.BT_NB_Joueurs);
 				BT_Nb_Joueurs.setOnClickListener(nb_JoueursListener);
 				dialog.show();
@@ -69,7 +72,7 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 		} catch (InterruptedException e) {e.printStackTrace();
 		} catch (ExecutionException e) {e.printStackTrace();}
 		dialog.setTitle("Paramètres de jeu");
-		dialog.setContentView(R.layout.dialog_nombre_joueurs);
+		dialog.setContentView(R.layout.layout_nombre_joueurs);
 		BT_Nb_Joueurs = (Button) dialog.findViewById(R.id.BT_NB_Joueurs);
 		BT_Nb_Joueurs.setOnClickListener(nb_JoueursListener);
 		dialog.show();
@@ -103,16 +106,44 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 		dialog.show();	
 	}
 	
-	private void envoi_Joueurs_Serveur(ArrayList<Joueur> listJoueurs) 
+	private void envoi_Joueurs_Serveur() 
 	{
-		Integer [] paramsTache = new Integer[2];
-		paramsTache[0] = ENVOI_JOUEURS; //Procédure envoi des joueurs au serveur
-		paramsTache[1] = listJoueurs.size(); //Nombre de joueurs à envoyer
+		setProgressDialog("Création des joueurs", "Envoi au serveur...", false);
+		Integer [] paramsTache = new Integer[1];
+		paramsTache[0] = CREATION_JOUEURS; //Procédure envoi des joueurs au serveur
 		TacheTransmission transmission = new TacheTransmission(context, connexion, listJoueurs);
 		transmission.execute(paramsTache);
 		try {
-			transmission.get(); //Attente de la fin de tache (INUTILE VBTWWW)
+			listJoueurs = transmission.get(); //Attente de la fin de tache et récupération de la liste
+			if (listJoueurs == null)
+				Toast.makeText(context, "Erreur lors de l'envoi des joueurs au serveur", Toast.LENGTH_SHORT).show(); //TODO Exception
+			else 
+				reception_Joueurs_Cree(); //Procédure de réception des joueurs initialisés par le serveur
 		} catch (InterruptedException | ExecutionException e) {
+			Toast.makeText(context, "Erreur lors de l'envoi des joueurs au serveur", Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
+		}
+	}
+	
+	private void reception_Joueurs_Cree() throws InterruptedException {
+		setProgressDialog("Création des joueurs", "Réception des joueurs crées...", false);
+		Thread.sleep(2000);
+		Integer [] paramsTache = new Integer[1];
+		paramsTache[0] = SERVEUR_ENVOI_JOUEURS;
+		TacheTransmission transmission = new TacheTransmission(context, connexion, listJoueurs);
+		transmission.execute(paramsTache);
+		try {
+			listJoueurs = transmission.get();
+			setProgressDialog("", "", true);
+			if (listJoueurs == null)
+				Toast.makeText(context, "Erreur lors de la réception des joueurs", Toast.LENGTH_SHORT).show(); //TODO Exception
+			else {
+				Intent intent = new Intent(getBaseContext(), InitGameActivity.class);
+				intent.putExtra("listJoueurs", listJoueurs);
+				startActivity(intent);
+			}
+		} catch (ExecutionException e) {
+			Toast.makeText(context, "Erreur lors de la reception des joueurs", Toast.LENGTH_SHORT).show();
 			e.printStackTrace();
 		}
 	}
@@ -124,8 +155,8 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 			Integer nb_Joueurs;
 			EditText entreeNb_Joueurs = (EditText) dialog.findViewById(R.id.ET_NB_Joueurs);
 			nb_Joueurs = Integer.parseInt(entreeNb_Joueurs.getText().toString());
-			if ((int) nb_Joueurs < 1 || nb_Joueurs > 4)
-				Toast.makeText(context, "Veuillez entrer un nombre entre 1 et 4", Toast.LENGTH_SHORT).show();
+			if (nb_Joueurs < 2 || nb_Joueurs > 4)
+				Toast.makeText(context, "Veuillez entrer un nombre entre 2 et 4", Toast.LENGTH_SHORT).show();
 			else
 				remplir_entree_joueurs(nb_Joueurs.intValue());
 		}
@@ -136,17 +167,17 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 		@Override
 		public void onClick(View v) {
 			dialog.dismiss();
-			ArrayList<Joueur> listJoueurs = new ArrayList<Joueur>(tabLigneJoueur.length);
+			listJoueurs = new ArrayList<Joueur>(tabLigneJoueur.length);
 			String selectionCouleur;
 			EditText ET_nomJoueur;
 			Spinner listeCouleurs;
 			for (int i = 0; i < tabLigneJoueur.length; i++) {
 				ET_nomJoueur = (EditText) tabLigneJoueur[i].findViewById(R.id.ET_nomJoueur);
 				listeCouleurs = (Spinner) tabLigneJoueur[i].findViewById(R.id.listCouleurs);
-				selectionCouleur = listeCouleurs.getSelectedItem().toString();
+				selectionCouleur = helperCouleur.getRGBFromColorName(listeCouleurs.getSelectedItem().toString());
 				listJoueurs.add(new Joueur(ET_nomJoueur.getText().toString(), selectionCouleur));
 			}
-			envoi_Joueurs_Serveur(listJoueurs); //Envoi de la liste construite au serveur	
+			envoi_Joueurs_Serveur(); //Envoi de la liste construite au serveur	
 		}		
 	};
 	
@@ -157,4 +188,27 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 			connexion_Serveur();	
 		}		
 	};
+	
+	public void setProgressDialog(final String titre, final String message, boolean close)
+	{
+		if (progressDialog == null)
+			progressDialog = new ProgressDialog(context);
+		else if (close && progressDialog.isShowing()) {
+			progressDialog.dismiss();
+			return;
+		}
+	    runOnUiThread(new Runnable()
+	    {
+	    	@Override
+			public void run()
+	        {
+	    		if (!isFinishing())
+	    		{
+	    			progressDialog.setTitle(titre);
+	    			progressDialog.setMessage(message);
+	    			progressDialog.show();
+	    		}
+	        }
+	    });   
+	}
 }
