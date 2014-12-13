@@ -19,7 +19,7 @@ public class Main implements InterfaceLOTR {
 			do {
 				try 
 				{
-					constanteTraitement = jeu.recupererTraitement(); //Récupère l'entier définissant une constante
+					constanteTraitement = jeu.recupererTraitementClient(jeu.getClient()); //Récupère l'entier définissant une constante
 					if (constanteTraitement != null)  
 					{
 						switch (constanteTraitement.intValue()) 
@@ -47,13 +47,12 @@ public class Main implements InterfaceLOTR {
 				}
 				catch (EOFException | SocketException sock) { //Fermeture de la connexion cliente en cas d'exception levée
 					System.out.println("Erreur lors de la communication cliente, fermeture de la connexion...");
-					jeu.fermerThreadClient();
-					jeu.getThreadConnexion().setThreadDonnees(null);
+					jeu.fermerClient();
 					jeu.attenteConnexionClient();
 				}
 			} while (!jeu.getThreadConnexion().isServeurFinished()); 
 		} 
-		catch (Throwable e) {
+		catch (Throwable e) {depuis le client
 			e.printStackTrace();
 		}
 	}
