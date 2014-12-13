@@ -6,53 +6,62 @@ import java.util.ArrayList;
 import objects.Joueur;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.game.InterfaceLOTR;
 
-public class TacheTransmission extends AsyncTask<Integer, Void, Boolean> implements InterfaceLOTR {
+public class TacheTransmission extends AsyncTask<Integer, Void, ArrayList<Joueur>> implements InterfaceLOTR {
 
-	private Context context;
+	//private Context context;
 	private DonneesConnexion connexion;
 	private ArrayList<Joueur> listJoueurs;
 	
 	public TacheTransmission(Context context, DonneesConnexion con, ArrayList<Joueur> listJoueur) 
 	{
-		this.context = context;
+		//this.context = context;
 		this.connexion = con;
 		this.listJoueurs = listJoueur;
 	}
 	
 	@Override
-	protected Boolean doInBackground(Integer ... params) {
+	protected ArrayList<Joueur> doInBackground(Integer ... params) {
 		Integer traitement = params[0];
-		Integer nbJoueurs =  params[1];
-		switch (traitement.intValue()) {
-			case ENVOI_JOUEURS : 
-				try {
-					this.connexion.getOutput().sendInt(ENVOI_JOUEURS);
-					if (!(this.connexion.getString().equals("#OK"))) //Vérification de la synchro du serveur
-						return false;
-					this.connexion.getOutput().sendInt(nbJoueurs.intValue());
-					for (int i = 0; i < nbJoueurs.intValue(); i++) {
+		Integer nbJoueurs = listJoueurs.size();
+		switch (traitement.intValue()) 
+		{
+			case CREATION_JOUEURS : 
+				try 
+				{
+					connexion.getOutput().sendInt(CREATION_JOUEURS);
+					if (!(connexion.getString().equals("#OK"))) //Vérification de la synchro du serveur
+						return null;
+					connexion.getOutput().sendInt(nbJoueurs);
+					for (int i = 0; i < nbJoueurs; i++) {
 						Joueur toSend = listJoueurs.get(i);
-						this.connexion.getOutput().sendJoueur(toSend);
+						connexion.getOutput().sendJoueur(toSend);
 					}
-					return true;
+					return listJoueurs;
 				} 
 				catch (IOException | ClassNotFoundException e) {
 					e.printStackTrace();
-					return false;
+					return null;
 				}
-			default : return false;
+			case SERVEUR_ENVOI_JOUEURS :
+				try 
+				{
+					this.connexion.getOutput().sendInt(SERVEUR_ENVOI_JOUEURS);
+					if (!(this.connexion.getString().equals("#OK"))) //Vérification de la synchro du serveur
+						return null;
+					for (int i = 0; i < nbJoueurs; i++) {
+						Joueur joueurRecu = connexion.getInput().getJoueur();
+						listJoueurs.set(i, joueurRecu);
+					}
+					return listJoueurs;
+				} 
+				catch (IOException | ClassNotFoundException e) {
+					e.printStackTrace();
+					return null;
+				}
+			default : return null;
 		}
 	}
-	
-	@Override
-	protected void onPostExecute(Boolean result) {	
-		if ((boolean) result)
-			Toast.makeText(this.context, "Transmission OK", Toast.LENGTH_SHORT).show();
-		else
-			Toast.makeText(this.context, "Transmission FAILED", Toast.LENGTH_SHORT).show();
-    }
 }
