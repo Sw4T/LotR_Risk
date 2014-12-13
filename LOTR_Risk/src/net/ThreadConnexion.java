@@ -13,7 +13,7 @@ public class ThreadConnexion extends Thread {
 	
 	public ThreadConnexion() throws IOException {
 		super();
-		this.serveur = new ServerSocket(9876);
+		this.serveur = new ServerSocket(9875);
 		this.hasFinished = new AtomicBoolean(false); 
 	}
 	
