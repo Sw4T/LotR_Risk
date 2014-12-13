@@ -6,7 +6,7 @@ Description des packages
 * * *
 ##### *objects*
 * * *
-        Objets servant à modéliser les données du plateau risk
+        Objets servant à modéliser les données du plateau risk et les classes utilisées par le serveur
 * * *
 ##### *SwingGUI*
 * * *
