@@ -131,7 +131,7 @@ public class LOTR_Data {
 		ArrayList<Territoire> toReturn = new ArrayList<Territoire>();
 		for (Region r : this.mapRegion) {
 			for (Territoire t : r.getListTerritoire()) {
-				if (t.getType_T() == type) {
+				if (t.getType_Territoire() == type) {
 					toReturn.add(t);
 				}
 			}
