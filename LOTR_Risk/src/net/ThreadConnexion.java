@@ -5,16 +5,20 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import objects.Client;
+import utils.LOTR_Game;
+
 public class ThreadConnexion extends Thread {
 
 	private ServerSocket serveur;
-	private ThreadEnvoiReception T_DATA;
+	private LOTR_Game jeu;
 	protected AtomicBoolean hasFinished; //Boolean pouvant �tre modifi� dans n'importe quelle classe li�e au package net
 	
-	public ThreadConnexion() throws IOException {
+	public ThreadConnexion(LOTR_Game jeu) throws IOException {
 		super();
 		this.serveur = new ServerSocket(9875);
 		this.hasFinished = new AtomicBoolean(false); 
+		this.jeu = jeu;
 	}
 	
 	@Override
@@ -26,7 +30,7 @@ public class ThreadConnexion extends Thread {
 				socketEntree = this.serveur.accept();
 				System.out.println("Un client avec l'adresse " + socketEntree.getInetAddress().getHostAddress() + " se connecte..");
 				System.out.println("Serveur : Allo j'écoute ?");
-				this.T_DATA = new ThreadEnvoiReception(socketEntree);
+				this.jeu.ajouterNouveauClient(new Client(socketEntree));
 			} catch (IOException e) { System.out.println("Le serveur ferme ses portes...");}
 		}
 	}
@@ -43,13 +47,5 @@ public class ThreadConnexion extends Thread {
 		this.serveur.close();
 		this.hasFinished.set(true);
 		this.finalize();
-	}
-	
-	public ThreadEnvoiReception getThreadDonnees() {
-		return this.T_DATA;
-	}
-	
-	public void setThreadDonnees(ThreadEnvoiReception t_DATA) {
-		this.T_DATA = t_DATA;
 	}
 }
