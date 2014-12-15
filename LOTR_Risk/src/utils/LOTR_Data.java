@@ -113,12 +113,12 @@ public class LOTR_Data {
 	 */
 	public int calculer_Renforts(Joueur j)
 	{
-		if (j.getNb_Territoire() < 12)
+		if (j.getNB_Territoire() < 12)
 			return 3;
-		int renforts = j.getNb_Territoire() / 3;
+		int renforts = j.getNB_Territoire() / 3;
 		for (Region r : this.mapRegion) {
 			if (this.playerHasRegion(j, r.getNom()))
-				renforts += r.getNb_Renforts();
+				renforts += r.getNB_Renforts();
 		}
 		return renforts;
 	}
