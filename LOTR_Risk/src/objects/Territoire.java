@@ -8,13 +8,13 @@ public class Territoire implements Serializable {
 	private String nom;
 	private TypeTerritoire type_T;
 	private int nb_unite;
-	private boolean has_Hero;
-	private boolean has_Stronghold;
+	private boolean possede_Hero;
+	private boolean possede_Forteresse;
 	
 	public Territoire(String name, boolean has_Stronghold, TypeTerritoire type)
 	{
 		this.nom = name;
-		this.has_Stronghold = has_Stronghold;
+		this.possede_Forteresse = has_Stronghold;
 		this.nb_unite = 0;
 		this.type_T = type;
 	}
@@ -32,24 +32,24 @@ public class Territoire implements Serializable {
 		return nom;
 	}
 
-	public int getNb_Unite() {
+	public int getNB_Unite() {
 		return nb_unite;
 	}
 
-	public void setNb_Unite(int nb_unite) {
+	public void setNB_Unite(int nb_unite) {
 		this.nb_unite = nb_unite;
 	}
 
-	public boolean has_Hero() {
-		return has_Hero;
+	public boolean possedeHero() {
+		return possede_Hero;
 	}
 
-	public void setHas_Hero(boolean has_Hero) {
-		this.has_Hero = has_Hero;
+	public void set_possedeHero(boolean has_Hero) {
+		this.possede_Hero = has_Hero;
 	}
 
-	public boolean has_Stronghold() {
-		return has_Stronghold;
+	public boolean possedeForteresse() {
+		return possede_Forteresse;
 	}
 
 	public TypeTerritoire getType_Territoire() {

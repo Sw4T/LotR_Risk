@@ -42,7 +42,7 @@ public class Region {
 		this.nom = s;
 	}
 
-	public int getNb_Renforts() {
+	public int getNB_Renforts() {
 		return nb_renforts;
 	}
 	

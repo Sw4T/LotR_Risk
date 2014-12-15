@@ -85,15 +85,15 @@ public class Joueur implements Serializable {
 		return this.listTerritoire.contains(t);
 	}
 	
-	public int getNb_Territoire() {
+	public int getNB_Territoire() {
 		return this.listTerritoire.size();
 	}
 	
-	public int getNb_unites() {
+	public int getNB_unites() {
 		return nb_unites;
 	}
 
-	public void setNb_unites(int nb_unites) {
+	public void setNB_unites(int nb_unites) {
 		this.nb_unites = nb_unites;
 	}
 
