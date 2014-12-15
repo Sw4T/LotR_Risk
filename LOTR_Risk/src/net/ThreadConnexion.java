@@ -30,7 +30,10 @@ public class ThreadConnexion extends Thread {
 				socketEntree = this.serveur.accept();
 				System.out.println("Un client avec l'adresse " + socketEntree.getInetAddress().getHostAddress() + " se connecte..");
 				System.out.println("Serveur : Allo j'écoute ?");
-				this.jeu.ajouterNouveauClient(new Client(socketEntree));
+				if (jeu.getClient() == null)
+					jeu.ajouterNouveauClient(new Client(socketEntree));
+				else 
+					System.out.println("Un client est déja connecté, abandon de la demande de connexion...");
 			} catch (IOException e) { System.out.println("Le serveur ferme ses portes...");}
 		}
 	}
