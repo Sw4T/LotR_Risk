@@ -18,7 +18,7 @@ public class TestClient implements InterfaceLOTR {
 	 */
 	public static void main(String[] args) {
 		try {
-			Socket s = new Socket("localhost", 9876);
+			Socket s = new Socket("localhost", 9875);
 			s.setSoTimeout(4000); //Temps d'attente de 4s pour les lectures/écritures
 			Scanner input = new Scanner(System.in);
 			ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
