@@ -12,7 +12,6 @@ public class Emission {
 	
 	public Emission(OutputStream os, DonneesConnexion T_Read) throws IOException {
 		this.obj_out = new ObjectOutputStream(os);	
-		
 	}
 	
 	public void sendJoueur(Joueur j) throws IOException {
