@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import objects.Joueur;
 import utils.InterfaceLOTR;
 
-public class EnvoiReception extends Thread implements InterfaceLOTR{
+public class EnvoiReception extends Thread implements InterfaceLOTR {
 
 	private ArrayList<Joueur> listJoueur; //Permet de stocker la liste recu ou voulante etre envoyée
 	private int traitement; //Sert à définir le traitement voulu (via constantes InterfaceLOTR)
@@ -24,19 +24,21 @@ public class EnvoiReception extends Thread implements InterfaceLOTR{
 	@Override
 	public void run() 
 	{
-		if (traitement == CREATION_JOUEURS) {
-			try {
-				this.listJoueur = getInfosJoueurs();
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-				this.listJoueur = null;
+		try {
+			switch (traitement)
+			{
+				case CREATION_JOUEURS : this.listJoueur = getInfosJoueurs();
+										break;
+				case SERVEUR_RECEPTION_JOUEURS : getJoueurs();
+										         break;
+				case SERVEUR_ENVOI_JOUEURS : if (sendJoueurs())
+												System.out.println("Envoi terminé avec succès");
+											 else
+												System.out.println("ERREUR lors de l'envoi des joueurs !");
+											 break;				
 			}
-		}
-		else if (traitement == SERVEUR_ENVOI_JOUEURS) {
-			if (sendInfosJoueurs())
-				System.out.println("Envoi terminé avec succès");
-			else
-				System.out.println("ERREUR lors de l'envoi des joueurs !");
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -66,7 +68,7 @@ public class EnvoiReception extends Thread implements InterfaceLOTR{
 		return this.listJoueur;
 	}
 	
-	private boolean sendInfosJoueurs() 
+	private boolean sendJoueurs() 
 	{
 		try {
 			if (listJoueur == null || listJoueur.size() == 0) {
@@ -80,6 +82,16 @@ public class EnvoiReception extends Thread implements InterfaceLOTR{
 			return false;
 		}
 		return true;
+	}
+	
+	private void getJoueurs() throws ClassNotFoundException, IOException 
+	{
+		out.sendString("#OK"); //Averti le client que sa demande est bien reçue 
+		for (int i = 0; i < listJoueur.size(); i++) {
+			Joueur joueurRecu = in.getJoueur();
+			System.out.println(joueurRecu);
+			listJoueur.set(i, joueurRecu);
+		}
 	}
 	
 	public ArrayList<Joueur> getListJoueur() {
