@@ -1,24 +1,24 @@
 ### Android project for LOTR_Risk Java project
 * * *
 ##ToDo
-    - Activities (InitGameActivity, MainActivity)
-    - Behavior of MainActivity
-    - Implement game progression
-    - Layout for MainActivity
+    - Activities (RenfortsActivity, DeplacementActivity, EndGameActivity)
+    - Implement game progression (~30 % done)
     - Custom layouts
     - Exceptions 
+    - Options/Preferences
     - Javadoc
 * * *
 ##Doing
-    - StartUpActivity (*FIXING*)
-    - InitGameActivity
-    - Layout files for dialog boxes
+    - RenfortsActivity
+    - InitGameActivity (*FIXING*)
+    - Test inputs/outputs with the server
     - Implement game progression
-    - Methods to send/receive data
-    - Custom Layout
+    - Base and custom layouts
 * * *
 ##Done
     - Base layout for StartUpActivity (init game rules/inputs)
+    - Base layout for InitGameActivity
+    - Send and initialize territories of players
     - Dialog boxes for player input
     - Send Players to server
     - Get Players from server
