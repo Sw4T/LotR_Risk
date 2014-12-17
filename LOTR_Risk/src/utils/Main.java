@@ -36,6 +36,10 @@ public class Main implements InterfaceLOTR {
 								System.out.println("Envoi des joueurs à l'application distante...");
 								jeu.sendJoueurs_ToRemote(); //Gestion exceptions TODO
 								break;
+							case SERVEUR_RECEPTION_JOUEURS :
+								System.out.println("Réception des joueurs depuis l'application distante...");
+								jeu.receiveJoueurs_FromRemote(); 
+								break;
 							case FERMER_SERVEUR : 
 								jeu.getThreadConnexion().close(); //Ferme le serveur
 								break;
