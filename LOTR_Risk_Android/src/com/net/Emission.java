@@ -32,5 +32,9 @@ public class Emission {
 	public void close() throws IOException {
 		this.obj_out.close();
 	}
+	
+	public void reset() throws IOException {
+		this.obj_out.reset();
+	}
 
 }
