@@ -89,6 +89,16 @@ public class LOTR_Game implements InterfaceLOTR {
 	}	
 	
 	/**
+	 * Reçoit la liste des joueurs depuis l'application distante.
+	 * @throws InterruptedException
+	 */
+	public void receiveJoueurs_FromRemote() throws InterruptedException {
+		EnvoiReception threadTraitement = this.client.definirTraitementEtExecuter(SERVEUR_RECEPTION_JOUEURS, tabJoueur);
+		threadTraitement.join();
+		this.tabJoueur = threadTraitement.getListJoueur(); 
+	}	
+	
+	/**
 	 * Retourne la liste des joueurs jouant à la partie.
 	 */
 	public ArrayList<Joueur> getJoueurs() {
@@ -129,7 +139,7 @@ public class LOTR_Game implements InterfaceLOTR {
 		this.client = null;
 	}
 	
-	Client getClient() {
+	public Client getClient() {
 		return this.client;
 	}
 }
