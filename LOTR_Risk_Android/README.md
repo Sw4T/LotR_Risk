@@ -20,5 +20,6 @@
     - Base layout for InitGameActivity
     - Send and initialize territories of players
     - Dialog boxes for player input
+    - Custom compteur
     - Send Players to server
     - Get Players from server
