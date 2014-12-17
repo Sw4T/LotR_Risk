@@ -40,16 +40,31 @@ public class Joueur implements Serializable {
 	}
 	
 	public void remove_Territoire_FromName(String str) {
+		int index = 0;
 		for (Territoire t : this.listTerritoire) {
 			if (t.getNom().equals(str)) {
-				this.remove_Territoire(t);
+				this.listTerritoire.remove(index);
 				return;
 			}
+			index++;
 		}
 	}
 
+	public void update_Territoire(Territoire t) {
+		this.remove_Territoire_FromName(t.getNom());
+		this.add_Territoire(t);
+	}
+	
 	public Territoire getTerritoire_FromIndex(int index) {
 		return this.listTerritoire.get(index);
+	}
+	
+	public Territoire getTerritoire(Territoire t) {
+		for (Territoire ter : this.listTerritoire) {
+			if (t.equals(ter)) 
+				return ter;
+		}
+		return null;
 	}
 	
 	@Override
@@ -71,7 +86,8 @@ public class Joueur implements Serializable {
 		StringBuffer str = new StringBuffer();
 		str.append(this.nom + " (" + this.fixColorJava() + ") " + "possède : \n\t");
 		for (int i = 0; i < this.listTerritoire.size(); i++) {
-			str.append(this.listTerritoire.get(i).getNom() + "\n\t");
+			str.append(this.listTerritoire.get(i).getNom() + " (" + 
+			this.listTerritoire.get(i).getNB_Unite() + ")\n\t");
 		}
 		return str.toString();
 	}
