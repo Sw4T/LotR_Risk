@@ -1,16 +1,18 @@
 package com.activities;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import objects.Joueur;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,11 +24,10 @@ import android.widget.Toast;
 
 import com.custom.HelperCouleur;
 import com.custom.Liste_Couleur;
+import com.custom.ServiceReseau;
+import com.custom.ServiceReseau.ReseauBinder;
 import com.game.InterfaceLOTR;
 import com.lotr_risk.R;
-import com.net.DonneesConnexion;
-import com.net.TacheConnexion;
-import com.net.TacheTransmission;
 
 public class StartUpActivity extends Activity implements InterfaceLOTR {
 
@@ -38,7 +39,8 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 	HelperCouleur helperCouleur;
 	View [] tabLigneJoueur;
 	ArrayList<Joueur> listJoueurs;
-	private DonneesConnexion connexion;
+	ServiceReseau serviceReseau;
+	boolean connexionActive = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,30 +55,46 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 		BT_Connexion.setOnClickListener(loggerListener);
 	}
 	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Intent intent = new Intent(StartUpActivity.this, ServiceReseau.class);
+		startService(intent);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+	}
+	
 	private void connexion_Serveur() 
 	{
 		//String addresse = ET_addrServ.getText().toString();
 		//String numPort = ET_numPort.getText().toString();
-		/* TEST AVEC DES VALEURS ARBITRAIRES -> LES MIENNES !::!!:D */
-		TacheConnexion t = (TacheConnexion) new TacheConnexion(getBaseContext()).execute("192.168.0.30", "9875");
-		try {
-			this.connexion = t.get();
-			if (this.connexion.get_Connexion_Reussi()) 
-			{
-				dialog.setTitle("Paramètres de jeu");
-				dialog.setContentView(R.layout.layout_nombre_joueurs);
-				BT_Nb_Joueurs = (Button) dialog.findViewById(R.id.BT_NB_Joueurs);
-				BT_Nb_Joueurs.setOnClickListener(nb_JoueursListener);
-				dialog.show();
-			}
-		} catch (InterruptedException e) {e.printStackTrace();
-		} catch (ExecutionException e) {e.printStackTrace();}
-		dialog.setTitle("Paramètres de jeu");
-		dialog.setContentView(R.layout.layout_nombre_joueurs);
-		BT_Nb_Joueurs = (Button) dialog.findViewById(R.id.BT_NB_Joueurs);
-		BT_Nb_Joueurs.setOnClickListener(nb_JoueursListener);
-		dialog.show();
-	}
+		/* VALEURS ARBITRAIRES D'ADRESSE POUR RAPIDITE DE TEST */
+		if (!connexionActive) {
+			Toast.makeText(context, "Service réseau non initialisé, veuillez relancer ou patienter...", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (serviceReseau.connexionServeur())
+		{
+			dialog.setTitle("Paramètres de jeu");
+			dialog.setContentView(R.layout.layout_nombre_joueurs);
+			BT_Nb_Joueurs = (Button) dialog.findViewById(R.id.BT_NB_Joueurs);
+			BT_Nb_Joueurs.setOnClickListener(nb_JoueursListener);
+			dialog.show();
+		}
+    } 
+	
+	private OnClickListener nb_JoueursListener = new OnClickListener() 
+	{
+		@Override
+		public void onClick(View v) {
+			Integer nb_Joueurs;
+			EditText entreeNb_Joueurs = (EditText) dialog.findViewById(R.id.ET_NB_Joueurs);
+			nb_Joueurs = Integer.parseInt(entreeNb_Joueurs.getText().toString());
+			if (nb_Joueurs < 2 || nb_Joueurs > 4)
+				Toast.makeText(context, "Veuillez entrer un nombre entre 2 et 4", Toast.LENGTH_SHORT).show();
+			else
+				remplir_entree_joueurs(nb_Joueurs.intValue());
+		}
+	};
 	
 	@SuppressLint("InflateParams")
 	private void remplir_entree_joueurs(int nbJoueurs) {
@@ -106,62 +124,6 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 		dialog.show();	
 	}
 	
-	private void envoi_Joueurs_Serveur() 
-	{
-		setProgressDialog("Création des joueurs", "Envoi au serveur...", false);
-		Integer [] paramsTache = new Integer[1];
-		paramsTache[0] = CREATION_JOUEURS; //Procédure envoi des joueurs au serveur
-		TacheTransmission transmission = new TacheTransmission(context, connexion, listJoueurs);
-		transmission.execute(paramsTache);
-		try {
-			listJoueurs = transmission.get(); //Attente de la fin de tache et récupération de la liste
-			if (listJoueurs == null)
-				Toast.makeText(context, "Erreur lors de l'envoi des joueurs au serveur", Toast.LENGTH_SHORT).show(); //TODO Exception
-			else 
-				reception_Joueurs_Cree(); //Procédure de réception des joueurs initialisés par le serveur
-		} catch (InterruptedException | ExecutionException e) {
-			Toast.makeText(context, "Erreur lors de l'envoi des joueurs au serveur", Toast.LENGTH_SHORT).show();
-			e.printStackTrace();
-		}
-	}
-	
-	private void reception_Joueurs_Cree() throws InterruptedException {
-		setProgressDialog("Création des joueurs", "Réception des joueurs crées...", false);
-		Thread.sleep(2000);
-		Integer [] paramsTache = new Integer[1];
-		paramsTache[0] = SERVEUR_ENVOI_JOUEURS;
-		TacheTransmission transmission = new TacheTransmission(context, connexion, listJoueurs);
-		transmission.execute(paramsTache);
-		try {
-			listJoueurs = transmission.get();
-			setProgressDialog("", "", true);
-			if (listJoueurs == null)
-				Toast.makeText(context, "Erreur lors de la réception des joueurs", Toast.LENGTH_SHORT).show(); //TODO Exception
-			else {
-				Intent intent = new Intent(getBaseContext(), InitGameActivity.class);
-				intent.putExtra("listJoueurs", listJoueurs);
-				startActivity(intent);
-			}
-		} catch (ExecutionException e) {
-			Toast.makeText(context, "Erreur lors de la reception des joueurs", Toast.LENGTH_SHORT).show();
-			e.printStackTrace();
-		}
-	}
-	
-	private OnClickListener nb_JoueursListener = new OnClickListener() 
-	{
-		@Override
-		public void onClick(View v) {
-			Integer nb_Joueurs;
-			EditText entreeNb_Joueurs = (EditText) dialog.findViewById(R.id.ET_NB_Joueurs);
-			nb_Joueurs = Integer.parseInt(entreeNb_Joueurs.getText().toString());
-			if (nb_Joueurs < 2 || nb_Joueurs > 4)
-				Toast.makeText(context, "Veuillez entrer un nombre entre 2 et 4", Toast.LENGTH_SHORT).show();
-			else
-				remplir_entree_joueurs(nb_Joueurs.intValue());
-		}
-	};
-	
 	private OnClickListener envoiJoueursListener = new OnClickListener() 
 	{
 		@Override
@@ -181,6 +143,31 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 		}		
 	};
 	
+	private void envoi_Joueurs_Serveur() 
+	{
+		setProgressDialog("Création des joueurs", "Envoi au serveur...", false);
+		listJoueurs = serviceReseau.envoyerTraitementServeur(listJoueurs, CREATION_JOUEURS);
+		if (listJoueurs == null) 
+			Toast.makeText(context, "Erreur lors de la réception des joueurs", Toast.LENGTH_SHORT).show();
+		else 
+			reception_Joueurs_Cree();
+	}
+	
+	private void reception_Joueurs_Cree()
+	{
+		setProgressDialog("Création des joueurs", "Réception des joueurs crées...", false);
+		listJoueurs = serviceReseau.envoyerTraitementServeur(listJoueurs, SERVEUR_ENVOI_JOUEURS);
+		if (listJoueurs == null) 
+			Toast.makeText(context, "Erreur lors de la réception des joueurs", Toast.LENGTH_SHORT).show();
+		else {
+			Intent intent = new Intent(this, InitGameActivity.class);
+			intent.putExtra("listJoueurs", listJoueurs);
+			startActivity(intent);
+		}
+		setProgressDialog("", "", true);
+	}
+	
+	
 	private OnClickListener loggerListener = new OnClickListener()
 	{
 		@Override
@@ -189,6 +176,22 @@ public class StartUpActivity extends Activity implements InterfaceLOTR {
 		}		
 	};
 	
+	/** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+        	ReseauBinder binder = (ReseauBinder) service;
+            serviceReseau = binder.getService();
+            if (serviceReseau != null)
+            	connexionActive = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            connexionActive = false;
+        }
+    };
+    
 	public void setProgressDialog(final String titre, final String message, boolean close)
 	{
 		if (progressDialog == null)
