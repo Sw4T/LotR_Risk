@@ -58,15 +58,35 @@ public class Test_Data {
 	}
 	
 	@Test
+	public void test_get_territoire_joueur() {
+		territoire.setNB_Unite(3);
+		joueur.add_Territoire(territoire);
+		territoire.setNB_Unite(5);
+		assertEquals(joueur.getTerritoire(territoire).getNB_Unite(), 5);
+	}
+	
+	@Test
+	public void test_update_territoire_joueur() {
+		territoire.setNB_Unite(3);
+		joueur.add_Territoire(territoire);
+		territoire.add_Units(5);
+		Territoire update = new Territoire("testTerritoire", false, TypeTerritoire.BIEN);
+		update.setNB_Unite(8);
+		joueur.update_Territoire(update);
+		assertEquals(joueur.getTerritoire(update).getNB_Unite(), 8);
+		assertEquals(joueur.getTerritoire(territoire).getNB_Unite(), 8);
+	}
+	
+	@Test
 	public void test_joueur_get_nb_territoire() {
 		joueur.add_Territoire(territoire);
 		joueur.add_Territoire(new Territoire("1", false, TypeTerritoire.BIEN));
 		joueur.add_Territoire(new Territoire("2", false, TypeTerritoire.BIEN));
-		assertEquals(joueur.getNb_Territoire(), 3);
+		assertEquals(joueur.getNB_Territoire(), 3);
 		joueur.remove_Territoire_FromName("");
-		assertEquals(joueur.getNb_Territoire(), 3);
+		assertEquals(joueur.getNB_Territoire(), 3);
 		joueur.remove_Territoire_FromName("1");
-		assertEquals(joueur.getNb_Territoire(), 2);
+		assertEquals(joueur.getNB_Territoire(), 2);
 	}
 	
 	@Test
