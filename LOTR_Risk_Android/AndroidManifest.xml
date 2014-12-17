@@ -28,6 +28,6 @@
             android:name="com.activities.InitGameActivity"
             android:label="@string/title_activity_init_game" >
         </activity>
-    </application>
-
+    <service android:name="com.custom.ServiceReseau" android:enabled="true"/>
+    </application> 
 </manifest>
