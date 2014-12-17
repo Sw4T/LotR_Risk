@@ -78,6 +78,7 @@ public class EnvoiReception extends Thread implements InterfaceLOTR {
 			out.sendString("#OK");
 			for (Joueur j : listJoueur) 
 				out.sendJoueur(j);
+			out.reset();
 		} catch (IOException e) {
 			return false;
 		}

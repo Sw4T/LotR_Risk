@@ -76,6 +76,7 @@ public class TacheTransmission extends AsyncTask<Integer, Void, ArrayList<Joueur
 						Log.d("kiki", toSend.toString());
 						connexion.getOutput().sendJoueur(toSend);
 					}
+					connexion.getOutput().reset();
 					return listJoueurs;
 				} 
 				catch (IOException | ClassNotFoundException e) {
