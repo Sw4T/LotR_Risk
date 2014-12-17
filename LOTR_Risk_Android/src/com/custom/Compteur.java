@@ -2,12 +2,13 @@ package com.custom;
 
 import android.content.Context;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.lotr_risk.R;
 
-public class Compteur extends View {
+public class Compteur {
 
 	private Button BT_Plus, BT_Moins;
 	private EditText compteur;
@@ -15,7 +16,6 @@ public class Compteur extends View {
 	private int nbCompteur = 0;
 	
 	public Compteur(Context context, View vueCompteur) {
-		super(context); 
 		this.vue = vueCompteur;
 		inflateElements();
 	}
@@ -30,7 +30,11 @@ public class Compteur extends View {
 	}
 	
 	public Integer getNombreCompteur() {
-		return (Integer.parseInt(compteur.getText().toString()));
+		String valeurCompteur = compteur.getText().toString();
+		if (valeurCompteur.equals(""))
+			return Integer.valueOf(0);
+		else
+			return (Integer.parseInt(valeurCompteur));
 	}
 
 	private OnClickListener BT_Plus_Listener = new OnClickListener() {
