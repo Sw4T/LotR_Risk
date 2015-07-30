@@ -1,4 +1,4 @@
-package utils;
+package core;
 
 /**
  * Interface définissant les constantes de traitement liées aux étapes du jeu.

@@ -1,4 +1,4 @@
-package utils;
+package core;
 
 import java.io.EOFException;
 import java.net.SocketException;

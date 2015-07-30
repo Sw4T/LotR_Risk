@@ -5,8 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import core.LOTR_Game;
 import objects.Client;
-import utils.LOTR_Game;
 
 public class ThreadConnexion extends Thread {
 

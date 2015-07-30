@@ -7,8 +7,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import core.InterfaceLOTR;
 import objects.Joueur;
-import utils.InterfaceLOTR;
 
 public class TestClient implements InterfaceLOTR {
 

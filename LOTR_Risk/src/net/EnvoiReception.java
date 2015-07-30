@@ -3,8 +3,8 @@ package net;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import core.InterfaceLOTR;
 import objects.Joueur;
-import utils.InterfaceLOTR;
 
 public class EnvoiReception extends Thread implements InterfaceLOTR {
 

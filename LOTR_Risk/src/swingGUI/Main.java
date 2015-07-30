@@ -3,12 +3,12 @@ package swingGUI;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import core.InterfaceLOTR;
+import core.LOTR_Data;
+import core.LOTR_Game;
 import objects.Joueur;
 import objects.Territoire;
 import objects.TypeTerritoire;
-import utils.InterfaceLOTR;
-import utils.LOTR_Data;
-import utils.LOTR_Game;
 
 public class Main implements InterfaceLOTR {
 

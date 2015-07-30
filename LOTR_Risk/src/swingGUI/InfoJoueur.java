@@ -17,9 +17,9 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
+import core.LOTR_Data;
 import objects.Joueur;
 import objects.Territoire;
-import utils.LOTR_Data;
 
 public class InfoJoueur extends Box {
 	private ArrayList<Joueur> joueurData;
@@ -45,7 +45,7 @@ public class InfoJoueur extends Box {
 			nomJoueurJLabel.setForeground(Color.decode(joueur.getCouleurRGB()));
 			this.add(nomJoueurJLabel);
 			
-			JLabel nombreTotalUnitesJLabel = new JLabel("    Nombre total d'unités : " + String.valueOf(joueur.getNb_unites()));
+			JLabel nombreTotalUnitesJLabel = new JLabel("    Nombre total d'unités : " + String.valueOf(joueur.getNB_unites()));
 			nombreTotalUnitesJLabel.setForeground(Color.decode(joueur.getCouleurRGB()));
 			this.add(nombreTotalUnitesJLabel);
 			
