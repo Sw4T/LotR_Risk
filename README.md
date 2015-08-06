@@ -1,7 +1,7 @@
 LotR_Risk ALPHA
 =========
 
-LOTR Risk board game support for Java &amp; [Android](https://github.com/Sw4T/LotR_Risk/tree/master/LOTR_Risk_Android) in development...
+LOTR Risk board game support for Java &amp; [Android](https://github.com/Sw4T/LotR_Risk_Android) in development...
 
 ToDo
 ----
